@@ -4,7 +4,9 @@ psycopg[binary]
 alembic
 python-dotenv
 pydantic-settings
-passlib[bcrypt]
+passlib[bcrypt]==1.7.4
 python-jose[cryptography]
+email-validator
 pandas
 scikit-learn
+bcrypt==4.0.1
