@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.auth import router as auth_router
 from app.api.profiles import router as profiles_router
+from app.api.content import router as content_router
 
 app = FastAPI(
     title="CinePortal API",
@@ -31,3 +32,4 @@ def health_check():
 
 app.include_router(auth_router, prefix="/api")
 app.include_router(profiles_router, prefix="/api")
+app.include_router(content_router, prefix="/api")
