@@ -20,6 +20,16 @@ def create_user(db: Session, user_in: UserCreate) -> User:
     db.commit()
     db.refresh(user)
 
+    default_profile = Profile(
+        user_id=user.id,
+        name=user.full_name or "Main Profile",
+        maturity_rating="PG-13",
+    )
+
+    db.add(default_profile)
+    db.commit()
+    db.refresh(user)
+
     return user
 
 
