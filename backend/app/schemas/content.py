@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class GenreRead(BaseModel):
@@ -39,8 +39,8 @@ class ContentRead(BaseModel):
     trailer_url: str | None = None
     is_original: bool
     created_at: datetime
-    genres: list[GenreRead] = []
-    availability: list[ContentAvailabilityRead] = []
+    genres: list[GenreRead] = Field(default_factory=list)
+    availability: list[ContentAvailabilityRead] = Field(default_factory=list)
 
     model_config = ConfigDict(from_attributes=True)
 
