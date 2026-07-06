@@ -11,6 +11,12 @@ from app.api.recommendations import router as recommendations_router
 from app.api.chatbot import router as chatbot_router
 from app.api.billing import router as billing_router
 
+cors_origins = [
+    origin.strip()
+    for origin in settings.backend_cors_origins.split(",")
+    if origin.strip()
+]
+
 app = FastAPI(
     title="CinePortal API",
     description="Backend API for the AI-powered streaming discovery platform.",
@@ -19,9 +25,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-    ],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

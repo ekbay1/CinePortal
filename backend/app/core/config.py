@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     stripe_price_peacock: str
     stripe_price_prime: str
 
+    backend_cors_origins: str = "http://localhost:3000"
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
