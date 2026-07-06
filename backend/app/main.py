@@ -8,6 +8,7 @@ from app.api.watch import router as watch_router
 from app.api.search import router as search_router
 from app.api.ratings import router as ratings_router
 from app.api.recommendations import router as recommendations_router
+from app.api.chatbot import router as chatbot_router
 
 app = FastAPI(
     title="CinePortal API",
@@ -41,3 +42,4 @@ app.include_router(watch_router, prefix="/api")
 app.include_router(search_router, prefix="/api")
 app.include_router(ratings_router, prefix="/api")
 app.include_router(recommendations_router, prefix="/api")
+app.include_router(chatbot_router, prefix="/api")
