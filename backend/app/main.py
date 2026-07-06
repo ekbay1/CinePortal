@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+from app.core.config import settings
 from app.api.auth import router as auth_router
 from app.api.profiles import router as profiles_router
 from app.api.content import router as content_router
@@ -14,7 +14,7 @@ from app.api.billing import router as billing_router
 cors_origins = [
     origin.strip()
     for origin in settings.backend_cors_origins.split(",")
-    if origin.strip()
+        if origin.strip()
 ]
 
 app = FastAPI(
