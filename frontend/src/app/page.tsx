@@ -24,6 +24,12 @@ export default function Home() {
           >
             Start Searching
           </Link>
+          <Link
+            href="/billing"
+            className="rounded-lg border border-neutral-700 px-6 py-3 font-medium text-white hover:bg-neutral-900"
+          >
+            View Plans
+          </Link>
         </div>
       </section>
     </main>
