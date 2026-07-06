@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 type Subscription = {
   id: number;
@@ -15,18 +16,25 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 export default function SubscriptionsPage() {
-  const [token, setToken] = useState("");
+  const { token, isLoading, isAuthenticated } = useAuth();
+
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [isFetching, setIsFetching] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
 
+    if (!token) {
+        setError("You must be logged in to view subscriptions.");
+        return;
+    }
+
     try {
       const response = await fetch(`${API_BASE_URL}/api/billing/subscriptions`, {
         headers: {
-          Authorization: `Bearer ${token.trim()}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -46,20 +54,14 @@ export default function SubscriptionsPage() {
       <section className="mx-auto max-w-3xl">
         <h1 className="text-4xl font-bold">My Subscriptions</h1>
 
-        <form onSubmit={handleSubmit} className="mt-6 flex gap-3">
-          <input
-            value={token}
-            onChange={(event) => setToken(event.target.value)}
-            placeholder="Paste your access token"
-            className="flex-1 rounded-lg border border-neutral-700 bg-neutral-950 px-4 py-3 text-sm outline-none focus:border-white"
-          />
-
-          <button
+        <form onSubmit={handleSubmit} className="mt-6">
+        <button
             type="submit"
-            className="rounded-lg bg-white px-5 py-3 font-medium text-black hover:bg-neutral-200"
-          >
-            Load
-          </button>
+            disabled={isFetching}
+            className="rounded-lg bg-white px-5 py-3 font-medium text-black hover:bg-neutral-200 disabled:opacity-50"
+        >
+            {isFetching ? "Loading..." : "Load Subscriptions"}
+        </button>
         </form>
 
         {error && <p className="mt-4 text-red-500">{error}</p>}

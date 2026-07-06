@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 type ChatbotResponse = {
   reply: string;
@@ -20,11 +21,11 @@ const API_BASE_URL =
 
 export default function SupportPage() {
   const [input, setInput] = useState("");
-  const [token, setToken] = useState("");
+  const { token, isLoading, isAuthenticated } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       sender: "bot",
-      text: "Hi, I’m the StreamHub support bot. Ask me about billing, subscriptions, playback, password help, or add-ons.",
+      text: "Hi, I’m the CinePortal support bot. Ask me about billing, subscriptions, playback, password help, or add-ons.",
     },
   ]);
   const [isSending, setIsSending] = useState(false);
@@ -39,9 +40,9 @@ export default function SupportPage() {
       return;
     }
 
-    if (!token.trim()) {
-      setError("Paste a JWT token first. Later, this will come from frontend auth.");
-      return;
+    if (!token) {
+    setError("You must be logged in to use support.");
+    return;
     }
 
     setMessages((current) => [
@@ -61,7 +62,7 @@ export default function SupportPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token.trim()}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           message: trimmedInput,
@@ -99,7 +100,7 @@ export default function SupportPage() {
     <main className="min-h-screen bg-black px-6 py-10 text-white">
       <section className="mx-auto max-w-3xl">
         <p className="mb-2 text-sm uppercase tracking-wide text-neutral-500">
-          StreamHub AI
+          CinePortal
         </p>
 
         <h1 className="text-4xl font-bold">Customer Support Chatbot</h1>
@@ -107,18 +108,6 @@ export default function SupportPage() {
         <p className="mt-3 text-neutral-400">
           Ask about billing, subscriptions, add-ons, playback issues, or account access.
         </p>
-
-        <div className="mt-6">
-          <label className="mb-2 block text-sm text-neutral-400">
-            JWT token for testing
-          </label>
-          <input
-            value={token}
-            onChange={(event) => setToken(event.target.value)}
-            placeholder="Paste your access token from /api/auth/login"
-            className="w-full rounded-lg border border-neutral-700 bg-neutral-950 px-4 py-3 text-sm outline-none focus:border-white"
-          />
-        </div>
 
         <div className="mt-8 rounded-xl border border-neutral-800 bg-neutral-950 p-4">
           <div className="mb-4 flex max-h-96 flex-col gap-3 overflow-y-auto">

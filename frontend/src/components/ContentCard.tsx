@@ -41,7 +41,7 @@ export function ContentCard({ content }: ContentCardProps) {
 
       {content.is_original && (
         <p className="mt-3 inline-block rounded-full bg-neutral-800 px-3 py-1 text-xs">
-          StreamHub Original
+          CinePortal Original
         </p>
       )}
     </article>

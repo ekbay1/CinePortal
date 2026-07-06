@@ -37,6 +37,28 @@ export default function Home() {
             Get Support
           </Link>
         </div>
+        <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <Link
+            href="/signup"
+            className="rounded-lg bg-white px-6 py-3 font-medium text-black hover:bg-neutral-200"
+          >
+            Create Account
+          </Link>
+
+          <Link
+            href="/login"
+            className="rounded-lg border border-neutral-700 px-6 py-3 font-medium text-white hover:bg-neutral-900"
+          >
+            Log In
+          </Link>
+
+          <Link
+            href="/search"
+            className="rounded-lg border border-neutral-700 px-6 py-3 font-medium text-white hover:bg-neutral-900"
+          >
+            Search
+          </Link>
+        </div>
       </section>
     </main>
   );
