@@ -30,6 +30,12 @@ export default function Home() {
           >
             View Plans
           </Link>
+          <Link
+            href="/support"
+            className="rounded-lg border border-neutral-700 px-6 py-3 font-medium text-white hover:bg-neutral-900"
+          >
+            Get Support
+          </Link>
         </div>
       </section>
     </main>
