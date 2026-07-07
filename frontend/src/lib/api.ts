@@ -3,6 +3,8 @@ import type { SearchResponse } from "@/types/content";
 import type { HomepageResponse } from "@/types/content";
 import type { Profile, ProfileCreateInput } from "@/types/profile";
 import type { WatchHistoryItem, WatchlistItem } from "@/types/watch";
+import type { RecommendationResponse } from "@/types/recommendation";
+import type { Content } from "@/types/content";
 
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -255,6 +257,66 @@ export async function listContinueWatching(
 
   if (!response.ok) {
     throw new Error("Failed to load Continue Watching.");
+  }
+
+  return response.json();
+}
+
+export async function getProfileRecommendations(
+  token: string,
+  profileId: number,
+  limit = 10
+): Promise<RecommendationResponse> {
+  const response = await authFetch(
+    `/api/recommendations/profiles/${profileId}?limit=${limit}`,
+    token
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to load recommendations.");
+  }
+
+  return response.json();
+}
+
+export async function getSimilarTitles(
+  contentId: number,
+  limit = 10
+): Promise<RecommendationResponse> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/recommendations/content/${contentId}/similar?limit=${limit}`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to load similar titles.");
+  }
+
+  return response.json();
+}
+
+export async function getBecauseYouWatched(
+  token: string,
+  profileId: number,
+  contentId: number,
+  limit = 10
+): Promise<RecommendationResponse> {
+  const response = await authFetch(
+    `/api/recommendations/profiles/${profileId}/because-you-watched/${contentId}?limit=${limit}`,
+    token
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to load because-you-watched recommendations.");
+  }
+
+  return response.json();
+}
+
+export async function getContentById(contentId: number): Promise<Content> {
+  const response = await fetch(`${API_BASE_URL}/api/content/${contentId}`);
+
+  if (!response.ok) {
+    throw new Error("Failed to load content.");
   }
 
   return response.json();
