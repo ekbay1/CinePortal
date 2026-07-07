@@ -4,7 +4,7 @@ import { ProfileProvider } from "@/context/ProfileContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "StreamHub AI",
+  title: "CinePortal",
   description: "AI-powered streaming discovery platform",
 };
 

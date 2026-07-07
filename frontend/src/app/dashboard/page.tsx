@@ -141,6 +141,15 @@ export default function DashboardPage() {
             View personalized recommendations for your active profile.
           </p>
         </Link>
+        <Link
+          href="/ratings"
+          className="rounded-xl border border-neutral-800 bg-neutral-950 p-5 hover:bg-neutral-900"
+        >
+          <h2 className="text-xl font-semibold">Ratings</h2>
+          <p className="mt-2 text-neutral-400">
+            View and update your content ratings.
+          </p>
+        </Link>
         </section>
       </section>
     </main>

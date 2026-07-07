@@ -3,66 +3,42 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { RatingPanel } from "@/components/RatingPanel";
 import { useAuth } from "@/context/AuthContext";
 import { useProfiles } from "@/context/ProfileContext";
-import { listWatchlist, removeFromWatchlist } from "@/lib/api";
-import type { WatchlistItem } from "@/types/watch";
+import { listProfileRatings } from "@/lib/api";
+import type { Rating } from "@/types/rating";
 
-export default function WatchlistPage() {
+export default function RatingsPage() {
   const { token } = useAuth();
   const { activeProfile } = useProfiles();
 
-  const [items, setItems] = useState<WatchlistItem[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [ratings, setRatings] = useState<Rating[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [removingContentId, setRemovingContentId] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function loadWatchlist() {
-      if (!token || !activeProfile) {
-        return;
-      }
-
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const data = await listWatchlist(token, activeProfile.id);
-        setItems(data);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to load watchlist."
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    loadWatchlist();
-  }, [token, activeProfile]);
-
-  async function handleRemove(contentId: number) {
+  async function loadRatings() {
     if (!token || !activeProfile) {
       return;
     }
 
-    setRemovingContentId(contentId);
+    setIsLoading(true);
     setError(null);
 
     try {
-      await removeFromWatchlist(token, activeProfile.id, contentId);
-
-      setItems((currentItems) =>
-        currentItems.filter((item) => item.content_id !== contentId)
-      );
+      const data = await listProfileRatings(token, activeProfile.id);
+      setRatings(data);
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to remove item."
-      );
+      setError(err instanceof Error ? err.message : "Failed to load ratings.");
     } finally {
-      setRemovingContentId(null);
+      setIsLoading(false);
     }
   }
+
+  useEffect(() => {
+    loadRatings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, activeProfile]);
 
   return (
     <main className="min-h-screen bg-black px-6 py-10 text-white">
@@ -73,12 +49,12 @@ export default function WatchlistPage() {
               CinePortal
             </p>
 
-            <h1 className="text-4xl font-bold">My Watchlist</h1>
+            <h1 className="text-4xl font-bold">My Ratings</h1>
 
             <p className="mt-3 text-neutral-400">
               {activeProfile
-                ? `Watchlist for ${activeProfile.name}`
-                : "Choose a profile to view a watchlist."}
+                ? `Ratings for ${activeProfile.name}`
+                : "Choose a profile to view ratings."}
             </p>
           </div>
 
@@ -91,10 +67,10 @@ export default function WatchlistPage() {
             </Link>
 
             <Link
-              href="/browse"
+              href="/recommendations"
               className="rounded-lg border border-neutral-700 px-4 py-2 hover:bg-neutral-900"
             >
-              Browse
+              Recommendations
             </Link>
           </div>
         </div>
@@ -102,7 +78,7 @@ export default function WatchlistPage() {
         {!activeProfile && (
           <div className="mt-8 rounded-xl border border-neutral-800 bg-neutral-950 p-6">
             <p className="text-neutral-300">
-              You need to select a profile first.
+              Select a profile before viewing ratings.
             </p>
 
             <Link
@@ -114,12 +90,14 @@ export default function WatchlistPage() {
           </div>
         )}
 
-        {isLoading && <p className="mt-8 text-neutral-400">Loading watchlist...</p>}
+        {isLoading && <p className="mt-8 text-neutral-400">Loading ratings...</p>}
         {error && <p className="mt-8 text-red-500">{error}</p>}
 
-        {activeProfile && !isLoading && items.length === 0 && (
+        {activeProfile && !isLoading && ratings.length === 0 && (
           <div className="mt-8 rounded-xl border border-neutral-800 bg-neutral-950 p-6">
-            <p className="text-neutral-300">Your watchlist is empty.</p>
+            <p className="text-neutral-300">
+              You have not rated anything yet.
+            </p>
 
             <Link
               href="/browse"
@@ -131,46 +109,53 @@ export default function WatchlistPage() {
         )}
 
         <section className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {items.map((item) => {
-            const content = item.content;
+          {ratings.map((rating) => {
+            if (!rating.content) {
+              return null;
+            }
+
+            const content = rating.content;
             const genres = content.genres.map((genre) => genre.name).join(", ");
 
             return (
               <article
-                key={item.id}
+                key={rating.id}
                 className="rounded-xl border border-neutral-800 bg-neutral-950 p-4"
               >
-                <div className="mb-3 flex h-40 items-center justify-center rounded-lg bg-neutral-900 text-neutral-500">
-                  Poster
-                </div>
+                <Link href={`/content/${content.id}`}>
+                  <div className="mb-3 flex h-40 items-center justify-center rounded-lg bg-neutral-900 text-neutral-500 hover:bg-neutral-800">
+                    Poster
+                  </div>
+                </Link>
 
-                <h2 className="text-lg font-semibold">{content.title}</h2>
+                <Link href={`/content/${content.id}`}>
+                  <h2 className="text-lg font-semibold hover:underline">
+                    {content.title}
+                  </h2>
+                </Link>
 
                 <p className="mt-1 text-sm text-neutral-400">
                   {content.content_type} · {content.release_year ?? "Unknown"} ·{" "}
                   {content.maturity_rating ?? "Not rated"}
                 </p>
 
-                {content.description && (
-                  <p className="mt-3 line-clamp-3 text-sm text-neutral-300">
-                    {content.description}
-                  </p>
-                )}
-
                 <p className="mt-3 text-sm text-neutral-400">
                   Genres: {genres || "None"}
                 </p>
 
-                <button
-                  type="button"
-                  onClick={() => handleRemove(content.id)}
-                  disabled={removingContentId === content.id}
-                  className="mt-4 rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium hover:bg-neutral-900 disabled:opacity-50"
-                >
-                  {removingContentId === content.id
-                    ? "Removing..."
-                    : "Remove"}
-                </button>
+                <p className="mt-3 text-sm text-neutral-300">
+                  Current rating: {rating.score}/5
+                </p>
+
+                <div className="mt-4">
+                  <RatingPanel
+                    contentId={content.id}
+                    title={content.title}
+                    initialScore={rating.score}
+                    compact
+                    onRatingSaved={loadRatings}
+                  />
+                </div>
               </article>
             );
           })}

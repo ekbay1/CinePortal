@@ -9,6 +9,7 @@ type RecommendationRowProps = {
   emptyMessage?: string;
   onAddToWatchlist?: (contentId: number, title: string) => void;
   onStartWatching?: (contentId: number, title: string) => void;
+  onRatingSaved?: () => void;
   loadingContentId?: number | null;
 };
 
@@ -18,6 +19,7 @@ export function RecommendationRow({
   emptyMessage = "No recommendations yet.",
   onAddToWatchlist,
   onStartWatching,
+  onRatingSaved,
   loadingContentId,
 }: RecommendationRowProps) {
   return (
@@ -36,6 +38,7 @@ export function RecommendationRow({
               item={item}
               onAddToWatchlist={onAddToWatchlist}
               onStartWatching={onStartWatching}
+              onRatingSaved={onRatingSaved}
               isLoading={loadingContentId === item.content.id}
             />
           ))}

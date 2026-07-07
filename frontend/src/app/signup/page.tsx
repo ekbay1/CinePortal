@@ -42,7 +42,7 @@ export default function SignupPage() {
     <main className="flex min-h-screen items-center justify-center bg-black px-6 text-white">
       <section className="w-full max-w-md rounded-xl border border-neutral-800 bg-neutral-950 p-6">
         <p className="mb-2 text-sm uppercase tracking-wide text-neutral-500">
-          StreamHub AI
+          CinePortal
         </p>
 
         <h1 className="text-3xl font-bold">Create account</h1>

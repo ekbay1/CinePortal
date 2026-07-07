@@ -23,35 +23,31 @@ export default function RecommendationsPage() {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function loadRecommendations() {
-      if (!token || !activeProfile) {
-        return;
-      }
-
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const data = await getProfileRecommendations(
-          token,
-          activeProfile.id,
-          12
-        );
-
-        setItems(data.items);
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Failed to load recommendations."
-        );
-      } finally {
-        setIsLoading(false);
-      }
+  async function loadRecommendations() {
+    if (!token || !activeProfile) {
+      return;
     }
 
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const data = await getProfileRecommendations(token, activeProfile.id, 12);
+      setItems(data.items);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to load recommendations."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
     loadRecommendations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, activeProfile]);
 
   async function handleAddToWatchlist(contentId: number, title: string) {
@@ -104,7 +100,7 @@ export default function RecommendationsPage() {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="mb-2 text-sm uppercase tracking-wide text-neutral-500">
-              StreamHub AI
+              CinePortal
             </p>
 
             <h1 className="text-4xl font-bold">Recommended for You</h1>
@@ -166,6 +162,7 @@ export default function RecommendationsPage() {
               emptyMessage="No recommendations yet. Watch or rate a few titles first."
               onAddToWatchlist={handleAddToWatchlist}
               onStartWatching={handleStartWatching}
+              onRatingSaved={loadRecommendations}
               loadingContentId={loadingContentId}
             />
           </div>

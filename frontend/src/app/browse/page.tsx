@@ -86,7 +86,7 @@ export default function BrowsePage() {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="mb-2 text-sm uppercase tracking-wide text-neutral-500">
-              StreamHub AI
+              CinePortal
             </p>
 
             <h1 className="text-4xl font-bold">Browse</h1>
@@ -138,11 +138,15 @@ export default function BrowsePage() {
                       key={`${row.title}-${content.id}`}
                       className="rounded-xl border border-neutral-800 bg-neutral-950 p-4"
                     >
-                      <div className="mb-3 flex h-40 items-center justify-center rounded-lg bg-neutral-900 text-neutral-500">
-                        Poster
-                      </div>
+                      <Link href={`/content/${content.id}`}>
+                        <div className="mb-3 flex h-40 items-center justify-center rounded-lg bg-neutral-900 text-neutral-500 hover:bg-neutral-800">
+                          Poster
+                        </div>
+                      </Link>
 
-                      <h3 className="text-lg font-semibold">{content.title}</h3>
+                      <Link href={`/content/${content.id}`}>
+                         <h3 className="text-lg font-semibold hover:underline">{content.title}</h3>
+                      </Link>
 
                       <p className="mt-1 text-sm text-neutral-400">
                         {content.content_type} ·{" "}

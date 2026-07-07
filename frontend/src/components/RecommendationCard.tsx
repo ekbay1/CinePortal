@@ -3,11 +3,13 @@
 import Link from "next/link";
 
 import type { RecommendationItem } from "@/types/recommendation";
+import { RatingPanel } from "@/components/RatingPanel";
 
 type RecommendationCardProps = {
   item: RecommendationItem;
   onAddToWatchlist?: (contentId: number, title: string) => void;
   onStartWatching?: (contentId: number, title: string) => void;
+  onRatingSaved?: () => void;
   isLoading?: boolean;
 };
 
@@ -15,6 +17,7 @@ export function RecommendationCard({
   item,
   onAddToWatchlist,
   onStartWatching,
+  onRatingSaved,
   isLoading = false,
 }: RecommendationCardProps) {
   const content = item.content;
@@ -91,6 +94,14 @@ export function RecommendationCard({
           </button>
         )}
       </div>
+    <div className="mt-4">
+        <RatingPanel
+          contentId={content.id}
+          title={content.title}
+          compact
+          onRatingSaved={onRatingSaved}
+        />
+    </div>
     </article>
   );
 }

@@ -5,6 +5,7 @@ import type { Profile, ProfileCreateInput } from "@/types/profile";
 import type { WatchHistoryItem, WatchlistItem } from "@/types/watch";
 import type { RecommendationResponse } from "@/types/recommendation";
 import type { Content } from "@/types/content";
+import type { Rating, RatingCreateInput, RatingUpdateInput } from "@/types/rating";
 
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -320,4 +321,75 @@ export async function getContentById(contentId: number): Promise<Content> {
   }
 
   return response.json();
+}
+
+export async function createOrUpdateRating(
+  token: string,
+  input: RatingCreateInput
+): Promise<Rating> {
+  const response = await authFetch("/api/ratings/", token, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.detail ?? "Failed to save rating.");
+  }
+
+  return response.json();
+}
+
+export async function listProfileRatings(
+  token: string,
+  profileId: number
+): Promise<Rating[]> {
+  const response = await authFetch(`/api/ratings/profiles/${profileId}`, token);
+
+  if (!response.ok) {
+    throw new Error("Failed to load ratings.");
+  }
+
+  return response.json();
+}
+
+export async function updateProfileRating(
+  token: string,
+  profileId: number,
+  contentId: number,
+  input: RatingUpdateInput
+): Promise<Rating> {
+  const response = await authFetch(
+    `/api/ratings/profiles/${profileId}/content/${contentId}`,
+    token,
+    {
+      method: "PATCH",
+      body: JSON.stringify(input),
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.detail ?? "Failed to update rating.");
+  }
+
+  return response.json();
+}
+
+export async function deleteProfileRating(
+  token: string,
+  profileId: number,
+  contentId: number
+): Promise<void> {
+  const response = await authFetch(
+    `/api/ratings/profiles/${profileId}/content/${contentId}`,
+    token,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to delete rating.");
+  }
 }

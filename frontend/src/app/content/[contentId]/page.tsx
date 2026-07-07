@@ -16,6 +16,7 @@ import {
 } from "@/lib/api";
 import type { Content } from "@/types/content";
 import type { RecommendationItem } from "@/types/recommendation";
+import { RatingPanel } from "@/components/RatingPanel";
 
 export default function ContentDetailPage() {
   const params = useParams();
@@ -184,7 +185,7 @@ export default function ContentDetailPage() {
 
           <div>
             <p className="mb-2 text-sm uppercase tracking-wide text-neutral-500">
-              {content.is_original ? "StreamHub Original" : "Streaming Title"}
+              {content.is_original ? "CinePortal Original" : "Streaming Title"}
             </p>
 
             <h1 className="text-5xl font-bold">{content.title}</h1>
@@ -237,6 +238,12 @@ export default function ContentDetailPage() {
               >
                 Add to Watchlist
               </button>
+            </div>
+            <div className="mt-8">
+                <RatingPanel
+                    contentId={content.id}
+                    title={content.title}
+                />
             </div>
           </div>
         </section>
