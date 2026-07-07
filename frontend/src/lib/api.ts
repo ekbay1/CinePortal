@@ -1,5 +1,8 @@
 import type { LoginInput, LoginResponse, SignupInput, User } from "@/types/auth";
 import type { SearchResponse } from "@/types/content";
+import type { HomepageResponse } from "@/types/content";
+import type { Profile, ProfileCreateInput } from "@/types/profile";
+import type { WatchHistoryItem, WatchlistItem } from "@/types/watch";
 
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -106,4 +109,153 @@ export async function authFetch(
       ...(options.headers ?? {}),
     },
   });
+}
+
+export async function listProfiles(token: string): Promise<Profile[]> {
+  const response = await authFetch("/api/profiles/", token);
+
+  if (!response.ok) {
+    throw new Error("Failed to load profiles.");
+  }
+
+  return response.json();
+}
+
+export async function createProfile(
+  token: string,
+  input: ProfileCreateInput
+): Promise<Profile> {
+  const response = await authFetch("/api/profiles/", token, {
+    method: "POST",
+    body: JSON.stringify({
+      name: input.name,
+      avatar_url: input.avatar_url ?? null,
+      maturity_rating: input.maturity_rating ?? "PG-13",
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.detail ?? "Failed to create profile.");
+  }
+
+  return response.json();
+}
+
+export async function deleteProfile(
+  token: string,
+  profileId: number
+): Promise<void> {
+  const response = await authFetch(`/api/profiles/${profileId}`, token, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete profile.");
+  }
+}
+
+export async function getHomepageContent(): Promise<HomepageResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/content/home`);
+
+  if (!response.ok) {
+    throw new Error("Failed to load homepage content.");
+  }
+
+  return response.json();
+}
+
+export async function addToWatchlist(
+  token: string,
+  profileId: number,
+  contentId: number
+): Promise<WatchlistItem> {
+  const response = await authFetch("/api/watch/watchlist", token, {
+    method: "POST",
+    body: JSON.stringify({
+      profile_id: profileId,
+      content_id: contentId,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.detail ?? "Failed to add to watchlist.");
+  }
+
+  return response.json();
+}
+
+export async function listWatchlist(
+  token: string,
+  profileId: number
+): Promise<WatchlistItem[]> {
+  const response = await authFetch(
+    `/api/watch/profiles/${profileId}/watchlist`,
+    token
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to load watchlist.");
+  }
+
+  return response.json();
+}
+
+export async function removeFromWatchlist(
+  token: string,
+  profileId: number,
+  contentId: number
+): Promise<void> {
+  const response = await authFetch(
+    `/api/watch/profiles/${profileId}/watchlist/${contentId}`,
+    token,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to remove from watchlist.");
+  }
+}
+
+export async function addWatchHistory(
+  token: string,
+  profileId: number,
+  contentId: number,
+  progressSeconds = 60,
+  completed = false
+): Promise<WatchHistoryItem> {
+  const response = await authFetch("/api/watch/history", token, {
+    method: "POST",
+    body: JSON.stringify({
+      profile_id: profileId,
+      content_id: contentId,
+      progress_seconds: progressSeconds,
+      completed,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update watch history.");
+  }
+
+  return response.json();
+}
+
+export async function listContinueWatching(
+  token: string,
+  profileId: number
+): Promise<WatchHistoryItem[]> {
+  const response = await authFetch(
+    `/api/watch/profiles/${profileId}/continue-watching`,
+    token
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to load Continue Watching.");
+  }
+
+  return response.json();
 }

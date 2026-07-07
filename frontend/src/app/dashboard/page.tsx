@@ -34,7 +34,7 @@ export default function DashboardPage() {
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="mb-2 text-sm uppercase tracking-wide text-neutral-500">
-              StreamHub AI
+              CinePortal
             </p>
 
             <h1 className="text-4xl font-bold">Dashboard</h1>
@@ -93,6 +93,45 @@ export default function DashboardPage() {
               View your local subscription status.
             </p>
           </Link>
+          <Link
+            href="/profiles"
+            className="rounded-xl border border-neutral-800 bg-neutral-950 p-5 hover:bg-neutral-900"
+            >
+            <h2 className="text-xl font-semibold">Profiles</h2>
+            <p className="mt-2 text-neutral-400">
+                Choose or create a streaming profile.
+            </p>
+            </Link>
+
+            <Link
+            href="/browse"
+            className="rounded-xl border border-neutral-800 bg-neutral-950 p-5 hover:bg-neutral-900"
+            >
+            <h2 className="text-xl font-semibold">Browse</h2>
+            <p className="mt-2 text-neutral-400">
+                Browse homepage rows and add titles to your watchlist.
+            </p>
+            </Link>
+
+            <Link
+            href="/watchlist"
+            className="rounded-xl border border-neutral-800 bg-neutral-950 p-5 hover:bg-neutral-900"
+            >
+            <h2 className="text-xl font-semibold">Watchlist</h2>
+            <p className="mt-2 text-neutral-400">
+                View saved titles for the active profile.
+            </p>
+            </Link>
+
+            <Link
+            href="/continue-watching"
+            className="rounded-xl border border-neutral-800 bg-neutral-950 p-5 hover:bg-neutral-900"
+            >
+            <h2 className="text-xl font-semibold">Continue Watching</h2>
+            <p className="mt-2 text-neutral-400">
+                View titles with saved watch progress.
+            </p>
+            </Link>
         </section>
       </section>
     </main>

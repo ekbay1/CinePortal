@@ -12,8 +12,8 @@ def get_billing_plans() -> dict[str, dict[str, str]]:
     return {
         "base": {
             "key": "base",
-            "name": "StreamHub Base Plan",
-            "description": "Access StreamHub original movies, shows, profiles, watchlists, and recommendations.",
+            "name": "CinePortal Base Plan",
+            "description": "Access CinePortal original movies, shows, profiles, watchlists, and recommendations.",
             "price_display": "$9.99/month",
             "plan_type": "base",
             "price_id": settings.stripe_price_base,

@@ -162,7 +162,7 @@ def get_homepage_content(db: Session) -> HomepageResponse:
                 items=[serialize_content(item) for item in trending],
             ),
             HomepageRow(
-                title="StreamHub Originals",
+                title="CinePortal Originals",
                 items=[serialize_content(item) for item in originals],
             ),
             HomepageRow(

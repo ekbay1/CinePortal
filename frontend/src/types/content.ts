@@ -37,3 +37,12 @@ export type SearchResponse = {
   total: number;
   results: Content[];
 };
+
+export type HomepageRow = {
+  title: string;
+  items: Content[];
+};
+
+export type HomepageResponse = {
+  rows: HomepageRow[];
+};

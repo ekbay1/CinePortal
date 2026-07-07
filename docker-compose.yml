@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - streamhub_pgdata:/var/lib/postgresql/data
+      - CinePortal_pgdata:/var/lib/postgresql/data
 
   backend:
     build:
@@ -28,4 +28,4 @@ services:
       - db
 
 volumes:
-  streamhub_pgdata:
+  CinePortal_pgdata:

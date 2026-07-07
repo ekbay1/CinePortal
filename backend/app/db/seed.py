@@ -45,7 +45,7 @@ def seed_content():
             return
 
         services = {
-            "StreamHub": get_or_create_service(db, "StreamHub"),
+            "CinePortal": get_or_create_service(db, "CinePortal"),
             "Netflix": get_or_create_service(db, "Netflix"),
             "Disney+": get_or_create_service(db, "Disney+"),
             "Max": get_or_create_service(db, "Max"),
@@ -74,7 +74,7 @@ def seed_content():
                 "runtime_minutes": 48,
                 "is_original": True,
                 "genres": ["Sci-Fi", "Thriller", "Drama"],
-                "services": ["StreamHub"],
+                "services": ["CinePortal"],
             },
             {
                 "title": "Final Quarter",
@@ -85,7 +85,7 @@ def seed_content():
                 "runtime_minutes": 132,
                 "is_original": True,
                 "genres": ["Drama"],
-                "services": ["StreamHub"],
+                "services": ["CinePortal"],
             },
             {
                 "title": "Dragon Harbor",
@@ -129,7 +129,7 @@ def seed_content():
                 "runtime_minutes": 42,
                 "is_original": True,
                 "genres": ["Documentary"],
-                "services": ["StreamHub", "Prime Video"],
+                "services": ["CinePortal", "Prime Video"],
             },
             {
                 "title": "Steel Runner",
@@ -186,7 +186,7 @@ def seed_content():
                         content_id=content.id,
                         service_id=services[service_name].id,
                         url=None,
-                        requires_addon=service_name != "StreamHub",
+                        requires_addon=service_name != "CinePortal",
                     )
                 )
 
