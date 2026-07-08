@@ -8,11 +8,13 @@ from app.db.session import get_db
 from app.models.user import User
 from app.schemas.billing import (
     BillingPlanRead,
+    BillingPortalSessionRead,
     CheckoutSessionCreate,
     CheckoutSessionRead,
     SubscriptionRead,
 )
 from app.services.billing_service import (
+    create_billing_portal_session,
     create_checkout_session,
     get_public_billing_plans,
     list_subscriptions_for_user,
@@ -62,6 +64,28 @@ def read_my_subscriptions(
         user_id=current_user.id,
     )
 
+@router.post("/create-portal-session", response_model=BillingPortalSessionRead)
+def create_customer_portal_session(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    try:
+        portal_url = create_billing_portal_session(
+            db=db,
+            user=current_user,
+        )
+    except ValueError as error:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(error),
+        ) from error
+    except stripe.StripeError as error:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=f"Stripe error: {str(error)}",
+        ) from error
+
+    return BillingPortalSessionRead(portal_url=portal_url)
 
 @router.post("/webhook")
 async def stripe_webhook(

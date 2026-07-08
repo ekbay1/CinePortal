@@ -177,3 +177,42 @@ def update_subscription_status(
     db.refresh(subscription)
 
     return subscription
+
+def get_latest_stripe_customer_id(
+    db: Session,
+    user_id: int,
+) -> str | None:
+    subscription = (
+        db.query(Subscription)
+        .filter(
+            Subscription.user_id == user_id,
+            Subscription.stripe_customer_id.isnot(None),
+        )
+        .order_by(Subscription.created_at.desc())
+        .first()
+    )
+
+    if not subscription:
+        return None
+
+    return subscription.stripe_customer_id
+
+
+def create_billing_portal_session(
+    db: Session,
+    user: User,
+) -> str:
+    stripe_customer_id = get_latest_stripe_customer_id(
+        db=db,
+        user_id=user.id,
+    )
+
+    if not stripe_customer_id:
+        raise ValueError("No Stripe customer found for this user.")
+
+    portal_session = stripe.billing_portal.Session.create(
+        customer=stripe_customer_id,
+        return_url=f"{settings.frontend_url}/account/subscriptions",
+    )
+
+    return portal_session.url
