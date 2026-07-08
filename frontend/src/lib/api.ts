@@ -7,6 +7,12 @@ import type { RecommendationResponse } from "@/types/recommendation";
 import type { Content } from "@/types/content";
 import type { Rating, RatingCreateInput, RatingUpdateInput } from "@/types/rating";
 import type { Genre, StreamingService} from "@/types/content";
+import type {
+  BillingPlan,
+  BillingPortalSessionResponse,
+  CheckoutSessionResponse,
+  Subscription,
+} from "@/types/billing";
 
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -410,6 +416,70 @@ export async function listStreamingServices(): Promise<StreamingService[]> {
 
   if (!response.ok) {
     throw new Error("Failed to load streaming services.");
+  }
+
+  return response.json();
+}
+
+export async function listBillingPlans(): Promise<BillingPlan[]> {
+  const response = await fetch(`${API_BASE_URL}/api/billing/plans`);
+
+  if (!response.ok) {
+    throw new Error("Failed to load billing plans.");
+  }
+
+  return response.json();
+}
+
+export async function createCheckoutSession(
+  token: string,
+  planKey: string
+): Promise<CheckoutSessionResponse> {
+  const response = await authFetch(
+    "/api/billing/create-checkout-session",
+    token,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        plan_key: planKey,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.detail ?? "Failed to create checkout session.");
+  }
+
+  return response.json();
+}
+
+export async function listSubscriptions(
+  token: string
+): Promise<Subscription[]> {
+  const response = await authFetch("/api/billing/subscriptions", token);
+
+  if (!response.ok) {
+    throw new Error("Failed to load subscriptions.");
+  }
+
+  return response.json();
+}
+
+export async function createBillingPortalSession(
+  token: string
+): Promise<BillingPortalSessionResponse> {
+  const response = await authFetch(
+    "/api/billing/create-portal-session",
+    token,
+    {
+      method: "POST",
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.detail ?? "Failed to create billing portal session.");
   }
 
   return response.json();
