@@ -13,7 +13,7 @@ import {
   getBaseSubscription,
   isSubscriptionActive,
 } from "@/lib/billing-utils";
-import type { Subscription } from "@/types/billing";
+import { Subscription } from "@/types/billing";
 
 export default function SubscriptionsPage() {
   const { token, isLoading, isAuthenticated } = useAuth();
