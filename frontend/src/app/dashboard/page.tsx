@@ -58,9 +58,10 @@ export default function DashboardPage() {
             href="/search"
             className="rounded-xl border border-neutral-800 bg-neutral-950 p-5 hover:bg-neutral-900"
           >
-            <h2 className="text-xl font-semibold">Search Content</h2>
+            <h2 className="text-xl font-semibold">Advanced Search</h2>
             <p className="mt-2 text-neutral-400">
-              Search movies and shows using text or voice.
+              Discover content using text search, voice search, filters, platforms,
+              genres, runtime, and release years.
             </p>
           </Link>
 

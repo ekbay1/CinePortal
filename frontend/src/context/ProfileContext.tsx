@@ -17,7 +17,7 @@ import {
 import type { Profile, ProfileCreateInput } from "@/types/profile";
 import { useAuth } from "@/context/AuthContext";
 
-const ACTIVE_PROFILE_KEY = "streamhub_active_profile_id";
+const ACTIVE_PROFILE_KEY = "cineportal_active_profile_id";
 
 type ProfileContextValue = {
   profiles: Profile[];

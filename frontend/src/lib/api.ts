@@ -6,11 +6,12 @@ import type { WatchHistoryItem, WatchlistItem } from "@/types/watch";
 import type { RecommendationResponse } from "@/types/recommendation";
 import type { Content } from "@/types/content";
 import type { Rating, RatingCreateInput, RatingUpdateInput } from "@/types/rating";
+import type { Genre, StreamingService} from "@/types/content";
 
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
-type SearchContentParams = {
+export type SearchContentParams = {
   q?: string;
   genre?: string;
   service?: string;
@@ -392,4 +393,24 @@ export async function deleteProfileRating(
   if (!response.ok) {
     throw new Error("Failed to delete rating.");
   }
+}
+
+export async function listGenres(): Promise<Genre[]> {
+  const response = await fetch(`${API_BASE_URL}/api/content/genres`);
+
+  if (!response.ok) {
+    throw new Error("Failed to load genres.");
+  }
+
+  return response.json();
+}
+
+export async function listStreamingServices(): Promise<StreamingService[]> {
+  const response = await fetch(`${API_BASE_URL}/api/content/services`);
+
+  if (!response.ok) {
+    throw new Error("Failed to load streaming services.");
+  }
+
+  return response.json();
 }
