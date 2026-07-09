@@ -43,8 +43,7 @@ jobs:
       FRONTEND_URL: https://cine-portal-omega.vercel.app
       BACKEND_CORS_ORIGINS: https://cine-portal-omega.vercel.app,http://localhost:3000
 
-      STRIPE_SECRET_KEY: sk_test_51QbY2OGClu0pWsDi8ZxmH8iyGhbiCUda5x3X2cRSTHOHqvh9dBdL3s559UlfeRH6pp8yzEX8kn7iwwTVKs8jBkhm00NBZQroWv
-      STRIPE_WEBHOOK_SECRET: whsec_b5NP1G0Pj6mv9ABjfVzxF2eIcEku8DiM
+      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
       STRIPE_PRICE_BASE: price_1Tq1TsGClu0pWsDirVqsti0C
       STRIPE_PRICE_DISNEY: price_1Tq282GClu0pWsDi6jdAOcF3
       STRIPE_PRICE_MAX: price_1Tq2IHGClu0pWsDihiIlJKrD
