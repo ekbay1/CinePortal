@@ -9,12 +9,14 @@ from app.models.user import User
 from app.schemas.token import Token
 from app.schemas.user import UserCreate, UserRead
 from app.services.auth_service import authenticate_user, create_user, get_user_by_email
+from typing import Annotated
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
-
+DBSession = Annotated[Session, Depends(get_db)]
+LoginForm = Annotated[OAuth2PasswordRequestForm, Depends()]
 
 @router.post("/signup", response_model=UserRead, status_code=status.HTTP_201_CREATED)
-def signup(user_in: UserCreate, db: Session = Depends(get_db)):
+def signup(user_in: UserCreate, db: DBSession):
     existing_user = get_user_by_email(db, user_in.email)
 
     if existing_user:
@@ -28,8 +30,8 @@ def signup(user_in: UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=Token)
 def login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(get_db),
+    form_data: LoginForm,
+    db: DBSession,
 ):
     user = authenticate_user(
         db,
