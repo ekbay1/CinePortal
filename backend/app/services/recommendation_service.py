@@ -138,22 +138,11 @@ def get_profile_recommendations(
     if similarity_matrix is None:
         return RecommendationResponse(profile_id=profile_id, items=[])
 
-    content_id_to_index = {
-        int(row["content_id"]): index
-        for index, row in dataframe.iterrows()
-    }
+    content_id_to_index = {int(row["content_id"]): index for index, row in dataframe.iterrows()}
 
-    history_items = (
-        db.query(WatchHistory)
-        .filter(WatchHistory.profile_id == profile_id)
-        .all()
-    )
+    history_items = db.query(WatchHistory).filter(WatchHistory.profile_id == profile_id).all()
 
-    rating_items = (
-        db.query(Rating)
-        .filter(Rating.profile_id == profile_id)
-        .all()
-    )
+    rating_items = db.query(Rating).filter(Rating.profile_id == profile_id).all()
 
     seed_weights = defaultdict(float)
 

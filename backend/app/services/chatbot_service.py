@@ -10,8 +10,26 @@ def detect_intent(message: str) -> tuple[str, str, list[str], bool]:
     billing_keywords = ["bill", "billing", "charged", "charge", "payment", "invoice", "receipt"]
     cancel_keywords = ["cancel", "unsubscribe", "end subscription", "stop subscription"]
     password_keywords = ["password", "login", "log in", "sign in", "locked out", "reset"]
-    playback_keywords = ["buffer", "buffering", "playback", "video", "quality", "stream", "loading", "lag"]
-    addon_keywords = ["add-on", "addon", "disney", "peacock", "max", "hbo", "prime", "subscription add"]
+    playback_keywords = [
+        "buffer",
+        "buffering",
+        "playback",
+        "video",
+        "quality",
+        "stream",
+        "loading",
+        "lag",
+    ]
+    addon_keywords = [
+        "add-on",
+        "addon",
+        "disney",
+        "peacock",
+        "max",
+        "hbo",
+        "prime",
+        "subscription add",
+    ]
     refund_keywords = ["refund", "money back", "wrong charge"]
     human_keywords = ["human", "agent", "representative", "support person", "real person"]
 

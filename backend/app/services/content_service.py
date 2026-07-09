@@ -92,22 +92,14 @@ def list_content(
         query = query.filter(Content.is_original == is_original)
 
     content_items = (
-        query.distinct()
-        .order_by(Content.created_at.desc())
-        .offset(offset)
-        .limit(limit)
-        .all()
+        query.distinct().order_by(Content.created_at.desc()).offset(offset).limit(limit).all()
     )
 
     return [serialize_content(item) for item in content_items]
 
 
 def get_content_by_id(db: Session, content_id: int) -> ContentRead | None:
-    content = (
-        get_content_query(db)
-        .filter(Content.id == content_id)
-        .first()
-    )
+    content = get_content_query(db).filter(Content.id == content_id).first()
 
     if not content:
         return None
@@ -124,12 +116,7 @@ def list_streaming_services(db: Session) -> list[StreamingService]:
 
 
 def get_homepage_content(db: Session) -> HomepageResponse:
-    trending = (
-        get_content_query(db)
-        .order_by(Content.created_at.desc())
-        .limit(10)
-        .all()
-    )
+    trending = get_content_query(db).order_by(Content.created_at.desc()).limit(10).all()
 
     originals = (
         get_content_query(db)

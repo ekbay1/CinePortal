@@ -48,9 +48,7 @@ def list_ratings_for_profile(
     ratings = (
         db.query(Rating)
         .options(
-            joinedload(Rating.content)
-            .joinedload(Content.genres)
-            .joinedload(ContentGenre.genre),
+            joinedload(Rating.content).joinedload(Content.genres).joinedload(ContentGenre.genre),
             joinedload(Rating.content)
             .joinedload(Content.availability)
             .joinedload(ContentAvailability.service),
@@ -89,9 +87,7 @@ def upsert_rating(
     rating = (
         db.query(Rating)
         .options(
-            joinedload(Rating.content)
-            .joinedload(Content.genres)
-            .joinedload(ContentGenre.genre),
+            joinedload(Rating.content).joinedload(Content.genres).joinedload(ContentGenre.genre),
             joinedload(Rating.content)
             .joinedload(Content.availability)
             .joinedload(ContentAvailability.service),
@@ -117,9 +113,7 @@ def update_rating(
     rating = (
         db.query(Rating)
         .options(
-            joinedload(Rating.content)
-            .joinedload(Content.genres)
-            .joinedload(ContentGenre.genre),
+            joinedload(Rating.content).joinedload(Content.genres).joinedload(ContentGenre.genre),
             joinedload(Rating.content)
             .joinedload(Content.availability)
             .joinedload(ContentAvailability.service),

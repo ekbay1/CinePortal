@@ -15,6 +15,7 @@ class UserCreate(BaseModel):
             raise ValueError("Password cannot be longer than 72 bytes.")
         return value
 
+
 class UserRead(BaseModel):
     id: int
     email: EmailStr

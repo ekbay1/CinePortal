@@ -14,11 +14,7 @@ def get_profile_for_user(
     profile_id: int,
     user_id: int,
 ) -> Profile | None:
-    return (
-        db.query(Profile)
-        .filter(Profile.id == profile_id, Profile.user_id == user_id)
-        .first()
-    )
+    return db.query(Profile).filter(Profile.id == profile_id, Profile.user_id == user_id).first()
 
 
 def get_content(db: Session, content_id: int) -> Content | None:

@@ -16,5 +16,9 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     profiles = relationship("Profile", back_populates="user", cascade="all, delete-orphan")
-    subscriptions = relationship("Subscription", back_populates="user", cascade="all, delete-orphan")
-    support_tickets = relationship("SupportTicket", back_populates="user", cascade="all, delete-orphan")
+    subscriptions = relationship(
+        "Subscription", back_populates="user", cascade="all, delete-orphan"
+    )
+    support_tickets = relationship(
+        "SupportTicket", back_populates="user", cascade="all, delete-orphan"
+    )

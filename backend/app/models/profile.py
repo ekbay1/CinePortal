@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, String, Integer
+from sqlalchemy import DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -17,6 +17,10 @@ class Profile(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="profiles")
-    watchlist_items = relationship("WatchlistItem", back_populates="profile", cascade="all, delete-orphan")
-    watch_history_items = relationship("WatchHistory", back_populates="profile", cascade="all, delete-orphan")
+    watchlist_items = relationship(
+        "WatchlistItem", back_populates="profile", cascade="all, delete-orphan"
+    )
+    watch_history_items = relationship(
+        "WatchHistory", back_populates="profile", cascade="all, delete-orphan"
+    )
     ratings = relationship("Rating", back_populates="profile", cascade="all, delete-orphan")

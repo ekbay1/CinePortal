@@ -1,0 +1,1239 @@
+I001 [*] Import block is un-sorted or un-formatted
+ --> alembic/env.py:1:1
+  |
+1 | / from logging.config import fileConfig
+2 | | from sqlalchemy import engine_from_config
+3 | | from sqlalchemy import pool
+4 | | from app.core.config import settings
+5 | | from alembic import context
+6 | | from app.db.base import Base
+7 | | import app.models
+  | |_________________^
+8 |
+9 |   # this is the Alembic Config object, which provides
+  |
+help: Organize imports
+
+F401 [*] `app.models` imported but unused
+ --> alembic/env.py:7:8
+  |
+5 | from alembic import context
+6 | from app.db.base import Base
+7 | import app.models
+  |        ^^^^^^^^^^
+8 |
+9 | # this is the Alembic Config object, which provides
+  |
+help: Remove unused import: `app.models`
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> alembic/versions/63f4cc68a91e_create_initial_tables.py:8:1
+   |
+ 7 |   """
+ 8 | / from typing import Sequence, Union
+ 9 | |
+10 | | from alembic import op
+11 | | import sqlalchemy as sa
+   | |_______________________^
+   |
+help: Organize imports
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> app/api/auth.py:1:1
+   |
+ 1 | / from fastapi import APIRouter, Depends, HTTPException, status
+ 2 | | from fastapi.security import OAuth2PasswordRequestForm
+ 3 | | from sqlalchemy.orm import Session
+ 4 | |
+ 5 | | from app.api.deps import get_current_user
+ 6 | | from app.core.security import create_access_token
+ 7 | | from app.db.session import get_db
+ 8 | | from app.models.user import User
+ 9 | | from app.schemas.token import Token
+10 | | from app.schemas.user import UserCreate, UserRead
+11 | | from app.services.auth_service import authenticate_user, create_user, get_user_by_email
+12 | | from typing import Annotated
+   | |____________________________^
+13 |
+14 |   router = APIRouter(prefix="/auth", tags=["Authentication"])
+   |
+help: Organize imports
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/auth.py:55:44
+   |
+54 | @router.get("/me", response_model=UserRead)
+55 | def read_current_user(current_user: User = Depends(get_current_user)):
+   |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+56 |     return current_user
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/billing.py:36:26
+   |
+34 | def create_billing_checkout_session(
+35 |     checkout_in: CheckoutSessionCreate,
+36 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+37 | ):
+38 |     try:
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/billing.py:59:19
+   |
+57 | @router.get("/subscriptions", response_model=list[SubscriptionRead])
+58 | def read_my_subscriptions(
+59 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+60 |     current_user: User = Depends(get_current_user),
+61 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/billing.py:60:26
+   |
+58 | def read_my_subscriptions(
+59 |     db: Session = Depends(get_db),
+60 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+61 | ):
+62 |     return list_subscriptions_for_user(
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/billing.py:69:19
+   |
+67 | @router.post("/create-portal-session", response_model=BillingPortalSessionRead)
+68 | def create_customer_portal_session(
+69 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+70 |     current_user: User = Depends(get_current_user),
+71 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/billing.py:70:26
+   |
+68 | def create_customer_portal_session(
+69 |     db: Session = Depends(get_db),
+70 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+71 | ):
+72 |     try:
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/billing.py:94:19
+   |
+92 |     request: Request,
+93 |     stripe_signature: str | None = Header(default=None, alias="stripe-signature"),
+94 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+95 | ):
+96 |     payload = await request.body()
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/chatbot.py:25:19
+   |
+23 | def send_chatbot_message(
+24 |     chatbot_request: ChatbotRequest,
+25 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+26 |     current_user: User = Depends(get_current_user),
+27 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/chatbot.py:26:26
+   |
+24 |     chatbot_request: ChatbotRequest,
+25 |     db: Session = Depends(get_db),
+26 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+27 | ):
+28 |     return handle_chatbot_message(
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/chatbot.py:38:19
+   |
+36 | @router.get("/tickets", response_model=list[SupportTicketRead])
+37 | def read_support_tickets(
+38 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+39 |     current_user: User = Depends(get_current_user),
+40 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/chatbot.py:39:26
+   |
+37 | def read_support_tickets(
+38 |     db: Session = Depends(get_db),
+39 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+40 | ):
+41 |     return list_support_tickets_for_user(
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/chatbot.py:50:19
+   |
+48 | def read_support_ticket(
+49 |     ticket_id: int,
+50 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+51 |     current_user: User = Depends(get_current_user),
+52 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/chatbot.py:51:26
+   |
+49 |     ticket_id: int,
+50 |     db: Session = Depends(get_db),
+51 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+52 | ):
+53 |     ticket = get_support_ticket_for_user(
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/chatbot.py:71:19
+   |
+69 | def close_ticket(
+70 |     ticket_id: int,
+71 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+72 |     current_user: User = Depends(get_current_user),
+73 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/chatbot.py:72:26
+   |
+70 |     ticket_id: int,
+71 |     db: Session = Depends(get_db),
+72 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+73 | ):
+74 |     ticket = get_support_ticket_for_user(
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/content.py:30:19
+   |
+28 |     limit: int = Query(default=20, ge=1, le=100),
+29 |     offset: int = Query(default=0, ge=0),
+30 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+31 | ):
+32 |     return list_content(
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/content.py:44:41
+   |
+43 | @router.get("/home", response_model=HomepageResponse)
+44 | def read_homepage_content(db: Session = Depends(get_db)):
+   |                                         ^^^^^^^^^^^^^^^
+45 |     return get_homepage_content(db)
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/content.py:49:31
+   |
+48 | @router.get("/genres", response_model=list[GenreRead])
+49 | def read_genres(db: Session = Depends(get_db)):
+   |                               ^^^^^^^^^^^^^^^
+50 |     return list_genres(db)
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/content.py:54:43
+   |
+53 | @router.get("/services", response_model=list[StreamingServiceRead])
+54 | def read_streaming_services(db: Session = Depends(get_db)):
+   |                                           ^^^^^^^^^^^^^^^
+55 |     return list_streaming_services(db)
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/content.py:61:19
+   |
+59 | def read_content_detail(
+60 |     content_id: int,
+61 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+62 | ):
+63 |     content = get_content_by_id(db, content_id=content_id)
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/deps.py:16:19
+   |
+14 | def get_current_user(
+15 |     token: str = Depends(oauth2_scheme),
+16 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+17 | ) -> User:
+18 |     credentials_exception = HTTPException(
+   |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+  --> app/api/deps.py:36:9
+   |
+35 |     except JWTError:
+36 |         raise credentials_exception
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+37 |
+38 |     user = get_user_by_email(db, email=email)
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/profiles.py:23:19
+   |
+21 | @router.get("/", response_model=list[ProfileRead])
+22 | def list_profiles(
+23 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+24 |     current_user: User = Depends(get_current_user),
+25 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/profiles.py:24:26
+   |
+22 | def list_profiles(
+23 |     db: Session = Depends(get_db),
+24 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+25 | ):
+26 |     return get_profiles_for_user(db, user_id=current_user.id)
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/profiles.py:32:19
+   |
+30 | def create_user_profile(
+31 |     profile_in: ProfileCreate,
+32 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+33 |     current_user: User = Depends(get_current_user),
+34 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/profiles.py:33:26
+   |
+31 |     profile_in: ProfileCreate,
+32 |     db: Session = Depends(get_db),
+33 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+34 | ):
+35 |     profile_count = count_profiles_for_user(db, user_id=current_user.id)
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/profiles.py:53:19
+   |
+51 | def read_profile(
+52 |     profile_id: int,
+53 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+54 |     current_user: User = Depends(get_current_user),
+55 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/profiles.py:54:26
+   |
+52 |     profile_id: int,
+53 |     db: Session = Depends(get_db),
+54 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+55 | ):
+56 |     profile = get_profile_for_user(
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/profiles.py:75:19
+   |
+73 |     profile_id: int,
+74 |     profile_in: ProfileUpdate,
+75 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+76 |     current_user: User = Depends(get_current_user),
+77 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/profiles.py:76:26
+   |
+74 |     profile_in: ProfileUpdate,
+75 |     db: Session = Depends(get_db),
+76 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+77 | ):
+78 |     profile = get_profile_for_user(
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+   --> app/api/profiles.py:100:19
+    |
+ 98 | def delete_user_profile(
+ 99 |     profile_id: int,
+100 |     db: Session = Depends(get_db),
+    |                   ^^^^^^^^^^^^^^^
+101 |     current_user: User = Depends(get_current_user),
+102 | ):
+    |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+   --> app/api/profiles.py:101:26
+    |
+ 99 |     profile_id: int,
+100 |     db: Session = Depends(get_db),
+101 |     current_user: User = Depends(get_current_user),
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+102 | ):
+103 |     profile = get_profile_for_user(
+    |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/ratings.py:24:19
+   |
+22 | def create_or_update_rating(
+23 |     rating_in: RatingCreate,
+24 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+25 |     current_user: User = Depends(get_current_user),
+26 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/ratings.py:25:26
+   |
+23 |     rating_in: RatingCreate,
+24 |     db: Session = Depends(get_db),
+25 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+26 | ):
+27 |     profile = get_profile_for_user(
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/ratings.py:53:19
+   |
+51 | def read_profile_ratings(
+52 |     profile_id: int,
+53 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+54 |     current_user: User = Depends(get_current_user),
+55 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/ratings.py:54:26
+   |
+52 |     profile_id: int,
+53 |     db: Session = Depends(get_db),
+54 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+55 | ):
+56 |     profile = get_profile_for_user(
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/ratings.py:79:19
+   |
+77 |     content_id: int,
+78 |     rating_in: RatingUpdate,
+79 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+80 |     current_user: User = Depends(get_current_user),
+81 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/ratings.py:80:26
+   |
+78 |     rating_in: RatingUpdate,
+79 |     db: Session = Depends(get_db),
+80 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+81 | ):
+82 |     profile = get_profile_for_user(
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+   --> app/api/ratings.py:120:19
+    |
+118 |     profile_id: int,
+119 |     content_id: int,
+120 |     db: Session = Depends(get_db),
+    |                   ^^^^^^^^^^^^^^^
+121 |     current_user: User = Depends(get_current_user),
+122 | ):
+    |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+   --> app/api/ratings.py:121:26
+    |
+119 |     content_id: int,
+120 |     db: Session = Depends(get_db),
+121 |     current_user: User = Depends(get_current_user),
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+122 | ):
+123 |     profile = get_profile_for_user(
+    |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/recommendations.py:26:19
+   |
+24 |     profile_id: int,
+25 |     limit: int = Query(default=10, ge=1, le=50),
+26 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+27 |     current_user: User = Depends(get_current_user),
+28 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/recommendations.py:27:26
+   |
+25 |     limit: int = Query(default=10, ge=1, le=50),
+26 |     db: Session = Depends(get_db),
+27 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+28 | ):
+29 |     profile = get_profile_for_user(
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/recommendations.py:55:19
+   |
+53 |     content_id: int,
+54 |     limit: int = Query(default=10, ge=1, le=50),
+55 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+56 | ):
+57 |     content = get_content(db, content_id=content_id)
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/recommendations.py:80:19
+   |
+78 |     content_id: int,
+79 |     limit: int = Query(default=10, ge=1, le=50),
+80 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+81 |     current_user: User = Depends(get_current_user),
+82 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/recommendations.py:81:26
+   |
+79 |     limit: int = Query(default=10, ge=1, le=50),
+80 |     db: Session = Depends(get_db),
+81 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+82 | ):
+83 |     profile = get_profile_for_user(
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/search.py:27:19
+   |
+25 |     limit: int = Query(default=20, ge=1, le=100),
+26 |     offset: int = Query(default=0, ge=0),
+27 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+28 | ):
+29 |     return search_content(
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/watch.py:34:19
+   |
+32 | def read_watchlist(
+33 |     profile_id: int,
+34 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+35 |     current_user: User = Depends(get_current_user),
+36 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/watch.py:35:26
+   |
+33 |     profile_id: int,
+34 |     db: Session = Depends(get_db),
+35 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+36 | ):
+37 |     profile = get_profile_for_user(db, profile_id, current_user.id)
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/watch.py:51:19
+   |
+49 | def create_watchlist_item(
+50 |     watchlist_in: WatchlistItemCreate,
+51 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+52 |     current_user: User = Depends(get_current_user),
+53 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/watch.py:52:26
+   |
+50 |     watchlist_in: WatchlistItemCreate,
+51 |     db: Session = Depends(get_db),
+52 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+53 | ):
+54 |     profile = get_profile_for_user(
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/watch.py:88:19
+   |
+86 |     profile_id: int,
+87 |     content_id: int,
+88 |     db: Session = Depends(get_db),
+   |                   ^^^^^^^^^^^^^^^
+89 |     current_user: User = Depends(get_current_user),
+90 | ):
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+  --> app/api/watch.py:89:26
+   |
+87 |     content_id: int,
+88 |     db: Session = Depends(get_db),
+89 |     current_user: User = Depends(get_current_user),
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+90 | ):
+91 |     profile = get_profile_for_user(db, profile_id, current_user.id)
+   |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+   --> app/api/watch.py:117:19
+    |
+115 | def read_watch_history(
+116 |     profile_id: int,
+117 |     db: Session = Depends(get_db),
+    |                   ^^^^^^^^^^^^^^^
+118 |     current_user: User = Depends(get_current_user),
+119 | ):
+    |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+   --> app/api/watch.py:118:26
+    |
+116 |     profile_id: int,
+117 |     db: Session = Depends(get_db),
+118 |     current_user: User = Depends(get_current_user),
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+119 | ):
+120 |     profile = get_profile_for_user(db, profile_id, current_user.id)
+    |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+   --> app/api/watch.py:134:19
+    |
+132 | def create_or_update_watch_history(
+133 |     history_in: WatchHistoryCreate,
+134 |     db: Session = Depends(get_db),
+    |                   ^^^^^^^^^^^^^^^
+135 |     current_user: User = Depends(get_current_user),
+136 | ):
+    |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+   --> app/api/watch.py:135:26
+    |
+133 |     history_in: WatchHistoryCreate,
+134 |     db: Session = Depends(get_db),
+135 |     current_user: User = Depends(get_current_user),
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+136 | ):
+137 |     profile = get_profile_for_user(
+    |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+   --> app/api/watch.py:168:19
+    |
+166 |     content_id: int,
+167 |     history_in: WatchHistoryUpdate,
+168 |     db: Session = Depends(get_db),
+    |                   ^^^^^^^^^^^^^^^
+169 |     current_user: User = Depends(get_current_user),
+170 | ):
+    |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+   --> app/api/watch.py:169:26
+    |
+167 |     history_in: WatchHistoryUpdate,
+168 |     db: Session = Depends(get_db),
+169 |     current_user: User = Depends(get_current_user),
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+170 | ):
+171 |     profile = get_profile_for_user(db, profile_id, current_user.id)
+    |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+   --> app/api/watch.py:204:19
+    |
+202 | def read_continue_watching(
+203 |     profile_id: int,
+204 |     db: Session = Depends(get_db),
+    |                   ^^^^^^^^^^^^^^^
+205 |     current_user: User = Depends(get_current_user),
+206 | ):
+    |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+   --> app/api/watch.py:205:26
+    |
+203 |     profile_id: int,
+204 |     db: Session = Depends(get_db),
+205 |     current_user: User = Depends(get_current_user),
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+206 | ):
+207 |     profile = get_profile_for_user(db, profile_id, current_user.id)
+    |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+   --> app/api/watch.py:225:19
+    |
+223 |     profile_id: int,
+224 |     content_id: int,
+225 |     db: Session = Depends(get_db),
+    |                   ^^^^^^^^^^^^^^^
+226 |     current_user: User = Depends(get_current_user),
+227 | ):
+    |
+
+B008 Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable
+   --> app/api/watch.py:226:26
+    |
+224 |     content_id: int,
+225 |     db: Session = Depends(get_db),
+226 |     current_user: User = Depends(get_current_user),
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+227 | ):
+228 |     profile = get_profile_for_user(db, profile_id, current_user.id)
+    |
+
+E501 Line too long (132 > 100)
+  --> app/db/seed.py:70:101
+   |
+68 |             {
+69 |                 "title": "Neon Empire",
+70 |                 "description": "A detective investigates a conspiracy in a futuristic city controlled by powerful media companies.",
+   |                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+71 |                 "content_type": "show",
+72 |                 "release_year": 2026,
+   |
+
+E501 Line too long (111 > 100)
+  --> app/db/seed.py:81:101
+   |
+79 |             {
+80 |                 "title": "Final Quarter",
+81 |                 "description": "A sports drama about an aging superstar trying to win one final championship.",
+   |                                                                                                     ^^^^^^^^^^^
+82 |                 "content_type": "movie",
+83 |                 "release_year": 2025,
+   |
+
+E501 Line too long (129 > 100)
+  --> app/db/seed.py:92:101
+   |
+90 |             {
+91 |                 "title": "Dragon Harbor",
+92 |                 "description": "A family fantasy adventure about siblings who discover a hidden island full of ancient dragons.",
+   |                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+93 |                 "content_type": "movie",
+94 |                 "release_year": 2024,
+   |
+
+E501 Line too long (128 > 100)
+   --> app/db/seed.py:103:101
+    |
+101 |             {
+102 |                 "title": "The Last Signal",
+103 |                 "description": "A tense sci-fi thriller following astronauts who receive a mysterious message from deep space.",
+    |                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+104 |                 "content_type": "movie",
+105 |                 "release_year": 2023,
+    |
+
+E501 Line too long (124 > 100)
+   --> app/db/seed.py:114:101
+    |
+112 |             {
+113 |                 "title": "Campus Chaos",
+114 |                 "description": "A comedy series about college roommates trying to survive school, work, and relationships.",
+    |                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
+115 |                 "content_type": "show",
+116 |                 "release_year": 2022,
+    |
+
+E501 Line too long (136 > 100)
+   --> app/db/seed.py:125:101
+    |
+123 | …
+124 | …
+125 | … exploring family-owned restaurants and the stories behind their signature dishes.",
+    |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+126 | …
+127 | …
+    |
+
+E501 Line too long (122 > 100)
+   --> app/db/seed.py:136:101
+    |
+134 |             {
+135 |                 "title": "Steel Runner",
+136 |                 "description": "An action movie about a former soldier racing against time to stop a global cyberattack.",
+    |                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^
+137 |                 "content_type": "movie",
+138 |                 "release_year": 2021,
+    |
+
+E501 Line too long (107 > 100)
+   --> app/db/seed.py:147:101
+    |
+145 |             {
+146 |                 "title": "Family Weekend",
+147 |                 "description": "A light comedy about a family reunion that goes completely off the rails.",
+    |                                                                                                     ^^^^^^^
+148 |                 "content_type": "movie",
+149 |                 "release_year": 2020,
+    |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> app/main.py:1:1
+   |
+ 1 | / from fastapi import FastAPI
+ 2 | | from fastapi.middleware.cors import CORSMiddleware
+ 3 | | from app.core.config import settings
+ 4 | | from app.api.auth import router as auth_router
+ 5 | | from app.api.profiles import router as profiles_router
+ 6 | | from app.api.content import router as content_router
+ 7 | | from app.api.watch import router as watch_router
+ 8 | | from app.api.search import router as search_router
+ 9 | | from app.api.ratings import router as ratings_router
+10 | | from app.api.recommendations import router as recommendations_router
+11 | | from app.api.chatbot import router as chatbot_router
+12 | | from app.api.billing import router as billing_router
+   | |____________________________________________________^
+13 |
+14 |   cors_origins = [
+   |
+help: Organize imports
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> app/models/__init__.py:1:1
+   |
+ 1 | / from app.models.user import User
+ 2 | | from app.models.profile import Profile
+ 3 | | from app.models.content import (
+ 4 | |     Content,
+ 5 | |     Genre,
+ 6 | |     ContentGenre,
+ 7 | |     StreamingService,
+ 8 | |     ContentAvailability,
+ 9 | | )
+10 | | from app.models.watchlist import WatchlistItem
+11 | | from app.models.watch_history import WatchHistory
+12 | | from app.models.rating import Rating
+13 | | from app.models.subscription import Subscription
+14 | | from app.models.support import SupportTicket, ChatbotMessage
+   | |____________________________________________________________^
+   |
+help: Organize imports
+
+F401 `app.models.user.User` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> app/models/__init__.py:1:29
+  |
+1 | from app.models.user import User
+  |                             ^^^^
+2 | from app.models.profile import Profile
+3 | from app.models.content import (
+  |
+help: Use an explicit re-export: `User as User`
+
+F401 `app.models.profile.Profile` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> app/models/__init__.py:2:32
+  |
+1 | from app.models.user import User
+2 | from app.models.profile import Profile
+  |                                ^^^^^^^
+3 | from app.models.content import (
+4 |     Content,
+  |
+help: Use an explicit re-export: `Profile as Profile`
+
+F401 `app.models.content.Content` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> app/models/__init__.py:4:5
+  |
+2 | from app.models.profile import Profile
+3 | from app.models.content import (
+4 |     Content,
+  |     ^^^^^^^
+5 |     Genre,
+6 |     ContentGenre,
+  |
+help: Use an explicit re-export: `Content as Content`
+
+F401 `app.models.content.Genre` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> app/models/__init__.py:5:5
+  |
+3 | from app.models.content import (
+4 |     Content,
+5 |     Genre,
+  |     ^^^^^
+6 |     ContentGenre,
+7 |     StreamingService,
+  |
+help: Use an explicit re-export: `Genre as Genre`
+
+F401 `app.models.content.ContentGenre` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> app/models/__init__.py:6:5
+  |
+4 |     Content,
+5 |     Genre,
+6 |     ContentGenre,
+  |     ^^^^^^^^^^^^
+7 |     StreamingService,
+8 |     ContentAvailability,
+  |
+help: Use an explicit re-export: `ContentGenre as ContentGenre`
+
+F401 `app.models.content.StreamingService` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> app/models/__init__.py:7:5
+  |
+5 |     Genre,
+6 |     ContentGenre,
+7 |     StreamingService,
+  |     ^^^^^^^^^^^^^^^^
+8 |     ContentAvailability,
+9 | )
+  |
+help: Use an explicit re-export: `StreamingService as StreamingService`
+
+F401 `app.models.content.ContentAvailability` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> app/models/__init__.py:8:5
+   |
+ 6 |     ContentGenre,
+ 7 |     StreamingService,
+ 8 |     ContentAvailability,
+   |     ^^^^^^^^^^^^^^^^^^^
+ 9 | )
+10 | from app.models.watchlist import WatchlistItem
+   |
+help: Use an explicit re-export: `ContentAvailability as ContentAvailability`
+
+F401 `app.models.watchlist.WatchlistItem` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> app/models/__init__.py:10:34
+   |
+ 8 |     ContentAvailability,
+ 9 | )
+10 | from app.models.watchlist import WatchlistItem
+   |                                  ^^^^^^^^^^^^^
+11 | from app.models.watch_history import WatchHistory
+12 | from app.models.rating import Rating
+   |
+help: Use an explicit re-export: `WatchlistItem as WatchlistItem`
+
+F401 `app.models.watch_history.WatchHistory` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> app/models/__init__.py:11:38
+   |
+ 9 | )
+10 | from app.models.watchlist import WatchlistItem
+11 | from app.models.watch_history import WatchHistory
+   |                                      ^^^^^^^^^^^^
+12 | from app.models.rating import Rating
+13 | from app.models.subscription import Subscription
+   |
+help: Use an explicit re-export: `WatchHistory as WatchHistory`
+
+F401 `app.models.rating.Rating` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> app/models/__init__.py:12:31
+   |
+10 | from app.models.watchlist import WatchlistItem
+11 | from app.models.watch_history import WatchHistory
+12 | from app.models.rating import Rating
+   |                               ^^^^^^
+13 | from app.models.subscription import Subscription
+14 | from app.models.support import SupportTicket, ChatbotMessage
+   |
+help: Use an explicit re-export: `Rating as Rating`
+
+F401 `app.models.subscription.Subscription` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> app/models/__init__.py:13:37
+   |
+11 | from app.models.watch_history import WatchHistory
+12 | from app.models.rating import Rating
+13 | from app.models.subscription import Subscription
+   |                                     ^^^^^^^^^^^^
+14 | from app.models.support import SupportTicket, ChatbotMessage
+   |
+help: Use an explicit re-export: `Subscription as Subscription`
+
+F401 `app.models.support.SupportTicket` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> app/models/__init__.py:14:32
+   |
+12 | from app.models.rating import Rating
+13 | from app.models.subscription import Subscription
+14 | from app.models.support import SupportTicket, ChatbotMessage
+   |                                ^^^^^^^^^^^^^
+   |
+help: Use an explicit re-export: `SupportTicket as SupportTicket`
+
+F401 `app.models.support.ChatbotMessage` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> app/models/__init__.py:14:47
+   |
+12 | from app.models.rating import Rating
+13 | from app.models.subscription import Subscription
+14 | from app.models.support import SupportTicket, ChatbotMessage
+   |                                               ^^^^^^^^^^^^^^
+   |
+help: Use an explicit re-export: `ChatbotMessage as ChatbotMessage`
+
+E501 Line too long (110 > 100)
+  --> app/models/content.py:35:101
+   |
+34 |     genres = relationship("ContentGenre", back_populates="content", cascade="all, delete-orphan")
+35 |     availability = relationship("ContentAvailability", back_populates="content", cascade="all, delete-orphan")
+   |                                                                                                     ^^^^^^^^^^
+36 |     watchlist_items = relationship("WatchlistItem", back_populates="content")
+37 |     watch_history_items = relationship("WatchHistory", back_populates="content")
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+ --> app/models/profile.py:1:1
+  |
+1 | / from datetime import datetime
+2 | |
+3 | | from sqlalchemy import DateTime, ForeignKey, String, Integer
+4 | | from sqlalchemy.orm import Mapped, mapped_column, relationship
+5 | |
+6 | | from app.db.base import Base
+  | |____________________________^
+  |
+help: Organize imports
+
+F401 [*] `sqlalchemy.Integer` imported but unused
+ --> app/models/profile.py:3:54
+  |
+1 | from datetime import datetime
+2 |
+3 | from sqlalchemy import DateTime, ForeignKey, String, Integer
+  |                                                      ^^^^^^^
+4 | from sqlalchemy.orm import Mapped, mapped_column, relationship
+  |
+help: Remove unused import: `sqlalchemy.Integer`
+
+E501 Line too long (107 > 100)
+  --> app/models/profile.py:20:101
+   |
+19 |     user = relationship("User", back_populates="profiles")
+20 |     watchlist_items = relationship("WatchlistItem", back_populates="profile", cascade="all, delete-orphan")
+   |                                                                                                     ^^^^^^^
+21 |     watch_history_items = relationship("WatchHistory", back_populates="profile", cascade="all, delete-orphan")
+22 |     ratings = relationship("Rating", back_populates="profile", cascade="all, delete-orphan")
+   |
+
+E501 Line too long (110 > 100)
+  --> app/models/profile.py:21:101
+   |
+19 |     user = relationship("User", back_populates="profiles")
+20 |     watchlist_items = relationship("WatchlistItem", back_populates="profile", cascade="all, delete-orphan")
+21 |     watch_history_items = relationship("WatchHistory", back_populates="profile", cascade="all, delete-orphan")
+   |                                                                                                     ^^^^^^^^^^
+22 |     ratings = relationship("Rating", back_populates="profile", cascade="all, delete-orphan")
+   |
+
+E501 Line too long (101 > 100)
+  --> app/models/user.py:19:101
+   |
+18 |     profiles = relationship("Profile", back_populates="user", cascade="all, delete-orphan")
+19 |     subscriptions = relationship("Subscription", back_populates="user", cascade="all, delete-orphan")
+   |                                                                                                     ^
+20 |     support_tickets = relationship("SupportTicket", back_populates="user", cascade="all, delete-orphan")
+   |
+
+E501 Line too long (104 > 100)
+  --> app/models/user.py:20:101
+   |
+18 |     profiles = relationship("Profile", back_populates="user", cascade="all, delete-orphan")
+19 |     subscriptions = relationship("Subscription", back_populates="user", cascade="all, delete-orphan")
+20 |     support_tickets = relationship("SupportTicket", back_populates="user", cascade="all, delete-orphan")
+   |                                                                                                     ^^^^
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+ --> app/schemas/search.py:1:1
+  |
+1 | / from pydantic import BaseModel
+2 | |
+3 | | from app.schemas.content import ContentRead
+  | |___________________________________________^
+4 |
+5 |   class SearchResponse(BaseModel):
+  |
+help: Organize imports
+
+F821 Undefined name `Profile`
+  --> app/services/auth_service.py:23:23
+   |
+21 |     db.refresh(user)
+22 |
+23 |     default_profile = Profile(
+   |                       ^^^^^^^
+24 |         user_id=user.id,
+25 |         name=user.full_name or "Main Profile",
+   |
+
+E501 Line too long (114 > 100)
+  --> app/services/billing_service.py:16:101
+   |
+14 |             "key": "base",
+15 |             "name": "CinePortal Base Plan",
+16 |             "description": "Access CinePortal original movies, shows, profiles, watchlists, and recommendations.",
+   |                                                                                                     ^^^^^^^^^^^^^^
+17 |             "price_display": "$9.99/month",
+18 |             "plan_type": "base",
+   |
+
+E501 Line too long (107 > 100)
+  --> app/services/chatbot_service.py:13:101
+   |
+11 |     cancel_keywords = ["cancel", "unsubscribe", "end subscription", "stop subscription"]
+12 |     password_keywords = ["password", "login", "log in", "sign in", "locked out", "reset"]
+13 |     playback_keywords = ["buffer", "buffering", "playback", "video", "quality", "stream", "loading", "lag"]
+   |                                                                                                     ^^^^^^^
+14 |     addon_keywords = ["add-on", "addon", "disney", "peacock", "max", "hbo", "prime", "subscription add"]
+15 |     refund_keywords = ["refund", "money back", "wrong charge"]
+   |
+
+E501 Line too long (104 > 100)
+  --> app/services/chatbot_service.py:14:101
+   |
+12 |     password_keywords = ["password", "login", "log in", "sign in", "locked out", "reset"]
+13 |     playback_keywords = ["buffer", "buffering", "playback", "video", "quality", "stream", "loading", "lag"]
+14 |     addon_keywords = ["add-on", "addon", "disney", "peacock", "max", "hbo", "prime", "subscription add"]
+   |                                                                                                     ^^^^
+15 |     refund_keywords = ["refund", "money back", "wrong charge"]
+16 |     human_keywords = ["human", "agent", "representative", "support person", "real person"]
+   |
+
+E501 Line too long (231 > 100)
+  --> app/services/chatbot_service.py:21:101
+   |
+19 | …
+20 | …
+21 | …se plan or add-on you want to cancel, then confirm cancellation. Your access should remain active until the end of the billing period.",
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+22 | …
+23 | …
+   |
+
+E501 Line too long (166 > 100)
+  --> app/services/chatbot_service.py:33:101
+   |
+31 | …
+32 | …
+33 | …You should be able to view your current plan, add-ons, invoices, receipts, and next renewal date.",
+   |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+34 | …
+35 | …
+   |
+
+E501 Line too long (167 > 100)
+  --> app/services/chatbot_service.py:45:101
+   |
+43 | …
+44 | …
+45 | …ption on the login page. If you still cannot access your account, a support ticket can be created.",
+   |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+46 | …
+47 | …
+   |
+
+E501 Line too long (165 > 100)
+  --> app/services/chatbot_service.py:57:101
+   |
+55 | …
+56 | …
+57 | …g your internet connection, lowering video quality, disabling VPNs, or restarting the app/device.",
+   |                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+58 | …
+59 | …
+   |
+
+E501 Line too long (177 > 100)
+  --> app/services/chatbot_service.py:69:101
+   |
+67 | …
+68 | …
+69 | …d-ons. You can add, remove, or view the status of services like Disney+, Peacock, Max, and Prime Video.",
+   |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+70 | …
+71 | …
+   |
+
+E501 Line too long (153 > 100)
+  --> app/services/chatbot_service.py:81:101
+   |
+79 | …
+80 | …
+81 | … I can create a support ticket with your message so a support representative can follow up.",
+   |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+82 | …
+83 | …
+   |
+
+E501 Line too long (133 > 100)
+   --> app/services/chatbot_service.py:101:101
+    |
+ 99 | …
+100 | …
+101 | …I can create a support ticket so a support representative can review your issue.",
+    |                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+102 | …
+103 | …
+    |
+
+I001 [*] Import block is un-sorted or un-formatted
+ --> app/services/profile_service.py:1:1
+  |
+1 | / from sqlalchemy.orm import Session
+2 | |
+3 | | from app.models.profile import Profile
+4 | | from app.schemas.profile import ProfileCreate, ProfileUpdate
+  | |____________________________________________________________^
+  |
+help: Organize imports
+
+F401 [*] `sqlalchemy.or_` imported but unused
+ --> app/services/search_service.py:1:44
+  |
+1 | from sqlalchemy import String, cast, func, or_
+  |                                            ^^^
+2 | from sqlalchemy.orm import Session, joinedload
+  |
+help: Remove unused import: `sqlalchemy.or_`
+
+Found 110 errors.
+[*] 11 fixable with the `--fix` option.

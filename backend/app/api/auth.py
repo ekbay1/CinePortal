@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -9,11 +11,11 @@ from app.models.user import User
 from app.schemas.token import Token
 from app.schemas.user import UserCreate, UserRead
 from app.services.auth_service import authenticate_user, create_user, get_user_by_email
-from typing import Annotated
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 DBSession = Annotated[Session, Depends(get_db)]
 LoginForm = Annotated[OAuth2PasswordRequestForm, Depends()]
+
 
 @router.post("/signup", response_model=UserRead, status_code=status.HTTP_201_CREATED)
 def signup(user_in: UserCreate, db: DBSession):

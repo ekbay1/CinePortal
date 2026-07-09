@@ -178,6 +178,7 @@ def update_subscription_status(
 
     return subscription
 
+
 def get_latest_stripe_customer_id(
     db: Session,
     user_id: int,

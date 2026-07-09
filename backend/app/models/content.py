@@ -32,7 +32,9 @@ class Content(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     genres = relationship("ContentGenre", back_populates="content", cascade="all, delete-orphan")
-    availability = relationship("ContentAvailability", back_populates="content", cascade="all, delete-orphan")
+    availability = relationship(
+        "ContentAvailability", back_populates="content", cascade="all, delete-orphan"
+    )
     watchlist_items = relationship("WatchlistItem", back_populates="content")
     watch_history_items = relationship("WatchHistory", back_populates="content")
     ratings = relationship("Rating", back_populates="content")

@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 from app.models.profile import Profile
 from app.schemas.profile import ProfileCreate, ProfileUpdate
 
-
 MAX_PROFILES_PER_USER = 5
 
 
@@ -21,11 +20,7 @@ def get_profile_for_user(
     profile_id: int,
     user_id: int,
 ) -> Profile | None:
-    return (
-        db.query(Profile)
-        .filter(Profile.id == profile_id, Profile.user_id == user_id)
-        .first()
-    )
+    return db.query(Profile).filter(Profile.id == profile_id, Profile.user_id == user_id).first()
 
 
 def create_profile(

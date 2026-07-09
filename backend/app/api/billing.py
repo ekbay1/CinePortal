@@ -64,6 +64,7 @@ def read_my_subscriptions(
         user_id=current_user.id,
     )
 
+
 @router.post("/create-portal-session", response_model=BillingPortalSessionRead)
 def create_customer_portal_session(
     db: Session = Depends(get_db),
@@ -86,6 +87,7 @@ def create_customer_portal_session(
         ) from error
 
     return BillingPortalSessionRead(portal_url=portal_url)
+
 
 @router.post("/webhook")
 async def stripe_webhook(

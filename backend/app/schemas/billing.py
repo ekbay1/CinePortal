@@ -30,5 +30,6 @@ class SubscriptionRead(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+
 class BillingPortalSessionRead(BaseModel):
     portal_url: str

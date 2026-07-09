@@ -1,4 +1,4 @@
-from sqlalchemy import String, cast, func, or_
+from sqlalchemy import String, cast, func
 from sqlalchemy.orm import Session, joinedload
 
 from app.models.content import (
@@ -88,12 +88,7 @@ def search_content(
 
     total = query.distinct().count()
 
-    content_items = (
-        query.distinct()
-        .offset(offset)
-        .limit(limit)
-        .all()
-    )
+    content_items = query.distinct().offset(offset).limit(limit).all()
 
     return SearchResponse(
         query=q,
