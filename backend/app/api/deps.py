@@ -32,8 +32,8 @@ def get_current_user(
         if email is None:
             raise credentials_exception
 
-    except JWTError:
-        raise credentials_exception
+    except JWTError as error:
+        raise credentials_exception from error
 
     user = get_user_by_email(db, email=email)
 
