@@ -67,7 +67,10 @@ def seed_content():
         content_seed_data = [
             {
                 "title": "Neon Empire",
-                "description": "A detective investigates a conspiracy in a futuristic city controlled by powerful media companies.",
+                "description": (
+                    "A detective investigates a conspiracy in a futuristic city controlled "
+                    "by powerful media companies."
+                ),
                 "content_type": "show",
                 "release_year": 2026,
                 "maturity_rating": "TV-14",
@@ -78,7 +81,10 @@ def seed_content():
             },
             {
                 "title": "Final Quarter",
-                "description": "A sports drama about an aging superstar trying to win one final championship.",
+                "description": (
+                    "A sports drama about an aging superstar trying to win one final "
+                    "championship."
+                ),
                 "content_type": "movie",
                 "release_year": 2025,
                 "maturity_rating": "PG-13",
@@ -89,7 +95,10 @@ def seed_content():
             },
             {
                 "title": "Dragon Harbor",
-                "description": "A family fantasy adventure about siblings who discover a hidden island full of ancient dragons.",
+                "description": (
+                    "A family fantasy adventure about siblings who discover a hidden island "
+                    "full of ancient dragons."
+                ),
                 "content_type": "movie",
                 "release_year": 2024,
                 "maturity_rating": "PG",
@@ -100,7 +109,10 @@ def seed_content():
             },
             {
                 "title": "The Last Signal",
-                "description": "A tense sci-fi thriller following astronauts who receive a mysterious message from deep space.",
+                "description": (
+                    "A tense sci-fi thriller following astronauts who receive a mysterious "
+                    "message from deep space."
+                ),
                 "content_type": "movie",
                 "release_year": 2023,
                 "maturity_rating": "PG-13",
@@ -111,7 +123,10 @@ def seed_content():
             },
             {
                 "title": "Campus Chaos",
-                "description": "A comedy series about college roommates trying to survive school, work, and relationships.",
+                "description": (
+                    "A comedy series about college roommates trying to survive school, work, "
+                    "and relationships."
+                ),
                 "content_type": "show",
                 "release_year": 2022,
                 "maturity_rating": "TV-14",
@@ -122,7 +137,10 @@ def seed_content():
             },
             {
                 "title": "Hidden Kitchens",
-                "description": "A documentary series exploring family-owned restaurants and the stories behind their signature dishes.",
+                "description": (
+                    "A documentary series exploring family-owned restaurants and the stories "
+                    "behind their signature dishes."
+                ),
                 "content_type": "documentary",
                 "release_year": 2025,
                 "maturity_rating": "TV-PG",
@@ -133,7 +151,10 @@ def seed_content():
             },
             {
                 "title": "Steel Runner",
-                "description": "An action movie about a former soldier racing against time to stop a global cyberattack.",
+                "description": (
+                    "An action movie about a former soldier racing against time to stop a "
+                    "global cyberattack."
+                ),
                 "content_type": "movie",
                 "release_year": 2021,
                 "maturity_rating": "PG-13",
@@ -144,7 +165,10 @@ def seed_content():
             },
             {
                 "title": "Family Weekend",
-                "description": "A light comedy about a family reunion that goes completely off the rails.",
+                "description": (
+                    "A light comedy about a family reunion that goes completely off the "
+                    "rails."
+                ),
                 "content_type": "movie",
                 "release_year": 2020,
                 "maturity_rating": "PG",

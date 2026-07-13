@@ -1,8 +1,16 @@
 from app.models.content import (
     Content as Content,
+)
+from app.models.content import (
     ContentAvailability as ContentAvailability,
+)
+from app.models.content import (
     ContentGenre as ContentGenre,
+)
+from app.models.content import (
     Genre as Genre,
+)
+from app.models.content import (
     StreamingService as StreamingService,
 )
 from app.models.profile import Profile as Profile

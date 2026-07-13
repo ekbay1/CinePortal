@@ -36,7 +36,12 @@ def detect_intent(message: str) -> tuple[str, str, list[str], bool]:
     if any(keyword in normalized for keyword in cancel_keywords):
         return (
             "cancel_subscription",
-            "You can cancel a subscription from Account Settings > Subscriptions. Select the base plan or add-on you want to cancel, then confirm cancellation. Your access should remain active until the end of the billing period.",
+            (
+                "You can cancel a subscription from Account Settings > Subscriptions. "
+                "Select the base plan or add-on you want to cancel, then confirm "
+                "cancellation. Your access should remain active until the end of the "
+                "billing period."
+            ),
             [
                 "Open subscription settings",
                 "Show active subscriptions",
@@ -48,7 +53,11 @@ def detect_intent(message: str) -> tuple[str, str, list[str], bool]:
     if any(keyword in normalized for keyword in billing_keywords):
         return (
             "billing",
-            "For billing issues, check Account Settings > Billing. You should be able to view your current plan, add-ons, invoices, receipts, and next renewal date.",
+            (
+                "For billing issues, check Account Settings > Billing. You should be "
+                "able to view your current plan, add-ons, invoices, receipts, and next "
+                "renewal date."
+            ),
             [
                 "View invoices",
                 "Check next renewal date",
@@ -60,7 +69,11 @@ def detect_intent(message: str) -> tuple[str, str, list[str], bool]:
     if any(keyword in normalized for keyword in password_keywords):
         return (
             "account_access",
-            "For login or password issues, use the password reset option on the login page. If you still cannot access your account, a support ticket can be created.",
+            (
+                "For login or password issues, use the password reset option on the "
+                "login page. If you still cannot access your account, a support ticket "
+                "can be created."
+            ),
             [
                 "Send password reset email",
                 "Check account email address",
@@ -72,7 +85,11 @@ def detect_intent(message: str) -> tuple[str, str, list[str], bool]:
     if any(keyword in normalized for keyword in playback_keywords):
         return (
             "playback",
-            "For playback issues, try refreshing the page, checking your internet connection, lowering video quality, disabling VPNs, or restarting the app/device.",
+            (
+                "For playback issues, try refreshing the page, checking your internet "
+                "connection, lowering video quality, disabling VPNs, or restarting the "
+                "app/device."
+            ),
             [
                 "Run playback troubleshooting",
                 "Lower video quality",
@@ -84,7 +101,11 @@ def detect_intent(message: str) -> tuple[str, str, list[str], bool]:
     if any(keyword in normalized for keyword in addon_keywords):
         return (
             "streaming_addons",
-            "Streaming add-ons can be managed from Account Settings > Add-ons. You can add, remove, or view the status of services like Disney+, Peacock, Max, and Prime Video.",
+            (
+                "Streaming add-ons can be managed from Account Settings > Add-ons. "
+                "You can add, remove, or view the status of services like Disney+, "
+                "Peacock, Max, and Prime Video."
+            ),
             [
                 "View add-ons",
                 "Add a streaming service",
@@ -96,7 +117,10 @@ def detect_intent(message: str) -> tuple[str, str, list[str], bool]:
     if any(keyword in normalized for keyword in refund_keywords):
         return (
             "refund_request",
-            "Refund requests need to be reviewed by support. I can create a support ticket with your message so a support representative can follow up.",
+            (
+                "Refund requests need to be reviewed by support. I can create a support "
+                "ticket with your message so a support representative can follow up."
+            ),
             [
                 "Create refund support ticket",
                 "View billing history",
@@ -116,7 +140,10 @@ def detect_intent(message: str) -> tuple[str, str, list[str], bool]:
 
     return (
         "unknown",
-        "I’m not fully sure how to solve that yet. I can create a support ticket so a support representative can review your issue.",
+        (
+            "I’m not fully sure how to solve that yet. I can create a support ticket "
+            "so a support representative can review your issue."
+        ),
         [
             "Create support ticket",
             "Try rephrasing the question",
