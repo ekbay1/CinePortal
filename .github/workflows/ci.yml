@@ -36,7 +36,7 @@ jobs:
         working-directory: backend
 
     env:
-      DATABASE_URL: postgresql://neondb_owner:npg_0Xj8zRklgvIB@ep-morning-mud-afafce3b-pooler.c-2.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+      DATABASE_URL: postgresql+psycopg://neondb_owner:npg_0Xj8zRklgvIB@ep-morning-mud-afafce3b-pooler.c-2.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
       SECRET_KEY: bdc288d753b30c025c79a22b1922d812650937ad10aaf6d329e7e0dbf4974483
       ALGORITHM: HS256
       ACCESS_TOKEN_EXPIRE_MINUTES: 60
