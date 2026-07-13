@@ -9,7 +9,7 @@ def test_root_endpoint():
     response = client.get("/")
 
     assert response.status_code == 200
-    assert response.json()["message"] == "StreamHub AI API is running"
+    assert response.json()["message"] == "CinePortal API is running"
 
 
 def test_health_endpoint():
