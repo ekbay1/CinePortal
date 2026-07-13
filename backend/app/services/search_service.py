@@ -28,8 +28,12 @@ def search_content(
 ) -> SearchResponse:
     query = db.query(Content).options(
         joinedload(Content.genres).joinedload(ContentGenre.genre),
-        joinedload(Content.availability).joinedload(ContentAvailability.service),
+        joinedload(Content.availability).joinedload(
+            ContentAvailability.service
+        ),
     )
+
+    rank = None
 
     if q:
         search_vector = func.to_tsvector(
@@ -46,13 +50,11 @@ def search_content(
 
         search_query = func.websearch_to_tsquery("english", q)
 
-        query = query.filter(search_vector.op("@@")(search_query))
+        query = query.filter(
+            search_vector.op("@@")(search_query)
+        )
 
         rank = func.ts_rank(search_vector, search_query)
-
-        query = query.order_by(rank.desc(), Content.release_year.desc().nullslast())
-    else:
-        query = query.order_by(Content.created_at.desc())
 
     if genre:
         query = (
@@ -69,29 +71,59 @@ def search_content(
         )
 
     if content_type:
-        query = query.filter(Content.content_type == content_type)
+        query = query.filter(
+            Content.content_type == content_type
+        )
 
     if maturity_rating:
-        query = query.filter(Content.maturity_rating == maturity_rating)
+        query = query.filter(
+            Content.maturity_rating == maturity_rating
+        )
 
     if max_runtime is not None:
-        query = query.filter(Content.runtime_minutes <= max_runtime)
+        query = query.filter(
+            Content.runtime_minutes <= max_runtime
+        )
 
     if min_year is not None:
-        query = query.filter(Content.release_year >= min_year)
+        query = query.filter(
+            Content.release_year >= min_year
+        )
 
     if max_year is not None:
-        query = query.filter(Content.release_year <= max_year)
+        query = query.filter(
+            Content.release_year <= max_year
+        )
 
     if is_original is not None:
-        query = query.filter(Content.is_original == is_original)
+        query = query.filter(
+            Content.is_original == is_original
+        )
 
-    total = query.distinct().count()
+    total = query.order_by(None).distinct().count()
 
-    content_items = query.distinct().offset(offset).limit(limit).all()
+    if rank is not None:
+        query = query.order_by(
+            rank.desc(),
+            Content.release_year.desc().nullslast(),
+        )
+    else:
+        query = query.order_by(
+            Content.created_at.desc()
+        )
+
+    content_items = (
+        query.distinct()
+        .offset(offset)
+        .limit(limit)
+        .all()
+    )
 
     return SearchResponse(
         query=q,
         total=total,
-        results=[serialize_content(item) for item in content_items],
+        results=[
+            serialize_content(item)
+            for item in content_items
+        ],
     )
