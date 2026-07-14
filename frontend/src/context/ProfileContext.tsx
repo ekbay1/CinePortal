@@ -90,24 +90,69 @@ export function ProfileProvider({ children }: ProfileProviderProps) {
 
   useEffect(() => {
     if (!isAuthenticated || !token) {
-      return;
-    }
-
-    void reloadProfiles();
-  }, [isAuthenticated, token, reloadProfiles]);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      return;
-    }
-
-    setProfiles([]);
-    setActiveProfileId(null);
-
-    if (typeof window !== "undefined") {
       localStorage.removeItem(ACTIVE_PROFILE_KEY);
+      return;
     }
-  }, [isAuthenticated]);
+
+    const authToken = token;
+    let cancelled = false;
+
+    void listProfiles(authToken)
+      .then((data) => {
+        if (cancelled) {
+          return;
+        }
+
+        setProfiles(data);
+
+        const storedProfileId = localStorage.getItem(
+          ACTIVE_PROFILE_KEY
+        );
+
+        const parsedStoredProfileId = storedProfileId
+          ? Number(storedProfileId)
+          : null;
+
+        const storedProfileStillExists = data.some(
+          (profile) => profile.id === parsedStoredProfileId
+        );
+
+        if (
+          storedProfileStillExists &&
+          parsedStoredProfileId !== null
+        ) {
+          setActiveProfileId(parsedStoredProfileId);
+          return;
+        }
+
+        const firstProfileId = data[0]?.id ?? null;
+
+        setActiveProfileId(firstProfileId);
+
+        if (firstProfileId !== null) {
+          localStorage.setItem(
+            ACTIVE_PROFILE_KEY,
+            String(firstProfileId)
+          );
+        } else {
+          localStorage.removeItem(ACTIVE_PROFILE_KEY);
+        }
+      })
+      .catch((error: unknown) => {
+        if (!cancelled) {
+          console.error("Failed to load profiles:", error);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setIsLoadingProfiles(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isAuthenticated, token]);
 
   function selectProfile(profileId: number) {
     setActiveProfileId(profileId);
