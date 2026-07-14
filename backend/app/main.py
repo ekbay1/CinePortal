@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
 
 from app.api.auth import router as auth_router
 from app.api.billing import router as billing_router
@@ -11,7 +12,6 @@ from app.api.recommendations import router as recommendations_router
 from app.api.search import router as search_router
 from app.api.watch import router as watch_router
 from app.core.config import settings
-from sqlalchemy import text
 from app.db.session import engine
 
 cors_origins = [
