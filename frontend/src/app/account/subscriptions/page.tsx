@@ -54,10 +54,44 @@ export default function SubscriptionsPage() {
   }
 
   useEffect(() => {
-    if (token) {
-      loadSubscriptions();
+    if (!token) {
+      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    const authToken = token;
+
+    let cancelled = false;
+
+    async function fetchSubscriptions() {
+      setIsLoadingSubscriptions(true);
+      setError(null);
+
+      try {
+        const data = await listSubscriptions(authToken);
+
+        if (!cancelled) {
+          setSubscriptions(data);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(
+            err instanceof Error
+              ? err.message
+              : "Failed to load subscriptions."
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoadingSubscriptions(false);
+        }
+      }
+    }
+
+    void fetchSubscriptions();
+
+    return () => {
+      cancelled = true;
+    };
   }, [token]);
 
   async function openBillingPortal() {

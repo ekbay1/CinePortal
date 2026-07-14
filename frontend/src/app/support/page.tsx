@@ -21,7 +21,7 @@ const API_BASE_URL =
 
 export default function SupportPage() {
   const [input, setInput] = useState("");
-  const { token, isLoading, isAuthenticated } = useAuth();
+  const { token } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       sender: "bot",

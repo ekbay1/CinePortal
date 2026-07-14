@@ -46,8 +46,50 @@ export default function RecommendationsPage() {
   }
 
   useEffect(() => {
-    loadRecommendations();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!token || !activeProfile) {
+      return;
+    }
+
+    const authToken = token;
+    const profileId = activeProfile.id;
+
+    let cancelled = false;
+
+    async function fetchRecommendations() {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const data =
+          await getProfileRecommendations(
+            authToken,
+            profileId,
+            12
+          );
+
+        if (!cancelled) {
+          setItems(data.items);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(
+            err instanceof Error
+              ? err.message
+              : "Failed to load recommendations."
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    void fetchRecommendations();
+
+    return () => {
+      cancelled = true;
+    };
   }, [token, activeProfile]);
 
   async function handleAddToWatchlist(contentId: number, title: string) {

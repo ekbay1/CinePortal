@@ -89,17 +89,25 @@ export function ProfileProvider({ children }: ProfileProviderProps) {
   }, [token]);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      reloadProfiles();
-    } else {
-      setProfiles([]);
-      setActiveProfileId(null);
-
-      if (typeof window !== "undefined") {
-        localStorage.removeItem(ACTIVE_PROFILE_KEY);
-      }
+    if (!isAuthenticated || !token) {
+      return;
     }
-  }, [isAuthenticated, reloadProfiles]);
+
+    void reloadProfiles();
+  }, [isAuthenticated, token, reloadProfiles]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      return;
+    }
+
+    setProfiles([]);
+    setActiveProfileId(null);
+
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(ACTIVE_PROFILE_KEY);
+    }
+  }, [isAuthenticated]);
 
   function selectProfile(profileId: number) {
     setActiveProfileId(profileId);

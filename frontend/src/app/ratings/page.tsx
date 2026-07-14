@@ -36,8 +36,48 @@ export default function RatingsPage() {
   }
 
   useEffect(() => {
-    loadRatings();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!token || !activeProfile) {
+      return;
+    }
+
+    const authToken = token;
+    const profileId = activeProfile.id;
+
+    let cancelled = false;
+
+    async function fetchRatings() {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const data = await listProfileRatings(
+          authToken,
+          profileId
+        );
+
+        if (!cancelled) {
+          setRatings(data);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(
+            err instanceof Error
+              ? err.message
+              : "Failed to load ratings."
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    void fetchRatings();
+
+    return () => {
+      cancelled = true;
+    };
   }, [token, activeProfile]);
 
   return (

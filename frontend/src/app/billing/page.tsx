@@ -75,7 +75,7 @@ export default function BillingPage() {
 
     try {
       const data = await createCheckoutSession(token, planKey);
-      window.location.href = data.checkout_url;
+      window.location.assign(data.checkout_url);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
@@ -94,7 +94,7 @@ export default function BillingPage() {
 
     try {
       const data = await createBillingPortalSession(token);
-      window.location.href = data.portal_url;
+      window.location.assign(data.portal_url);
     } catch (err) {
       setError(
         err instanceof Error
