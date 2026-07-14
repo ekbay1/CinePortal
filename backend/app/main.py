@@ -11,6 +11,8 @@ from app.api.recommendations import router as recommendations_router
 from app.api.search import router as search_router
 from app.api.watch import router as watch_router
 from app.core.config import settings
+from sqlalchemy import text
+from app.db.session import engine
 
 cors_origins = [
     origin.strip() for origin in settings.backend_cors_origins.split(",") if origin.strip()
@@ -30,7 +32,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.get("/")
 def root():
     return {"message": "CinePortal API is running"}
@@ -40,7 +41,23 @@ def root():
 def health_check():
     return {"status": "healthy"}
 
+@app.get("/health/db")
+def database_health_check():
+    try:
+        with engine.connect() as connection:
+            connection.execute(text("SELECT 1"))
 
+        return {
+            "status": "healthy",
+            "database": "connected",
+        }
+    except Exception as error:
+        return {
+            "status": "unhealthy",
+            "database": "disconnected",
+            "detail": str(error),
+        }
+    
 app.include_router(auth_router, prefix="/api")
 app.include_router(profiles_router, prefix="/api")
 app.include_router(content_router, prefix="/api")

@@ -12,7 +12,7 @@ if database_url.startswith("postgresql://"):
         1,
     )
 
-engine = create_engine(database_url)
+engine = create_engine(settings.sqlalchemy_database_url)
 
 SessionLocal = sessionmaker(
     autocommit=False,
