@@ -166,9 +166,6 @@ jobs:
               --yes \
               --environment=production \
               --token=vcp_112XLKKZldYlBlAKy1fWrra5xFTT1tmKRQRcuNE2aIKboRzuHx4JHFIu
-          env:
-            VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-            VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
         - name: Build sandbox frontend
           run: |
