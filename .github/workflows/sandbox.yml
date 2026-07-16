@@ -174,6 +174,7 @@ jobs:
             cd frontend
             vercel build \
               --prod \
+              --token=vcp_112XLKKZldYlBlAKy1fWrra5xFTT1tmKRQRcuNE2aIKboRzuHx4JHFIu
           env:
             VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
             VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -185,6 +186,7 @@ jobs:
               --prebuilt \
               --prod \
               --yes \
+              --token=vcp_112XLKKZldYlBlAKy1fWrra5xFTT1tmKRQRcuNE2aIKboRzuHx4JHFIu
           env:
             VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
             VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
