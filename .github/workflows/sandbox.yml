@@ -71,6 +71,11 @@ jobs:
           ACCESS_TOKEN_EXPIRE_MINUTES: 30
           STRIPE_SECRET_KEY: sk_test_51QbY2OGClu0pWsDi8ZxmH8iyGhbiCUda5x3X2cRSTHOHqvh9dBdL3s559UlfeRH6pp8yzEX8kn7iwwTVKs8jBkhm00NBZQroWv
           STRIPE_WEBHOOK_SECRET: whsec_292cfeadd2e7aae90f5b401729f905eccf8be74171c68036dc5639c02bed1ac8
+          STRIPE_PRICE_BASE: price_1Tq1TsGClu0pWsDirVqsti0C
+          STRIPE_PRICE_DISNEY: price_1Tq282GClu0pWsDi6jdAOcF3
+          STRIPE_PRICE_MAX: price_1Tq2IHGClu0pWsDihiIlJKrD
+          STRIPE_PRICE_PEACOCK: price_1Tq2MxGClu0pWsDi6wm44h0t
+          STRIPE_PRICE_PRIME: price_1Tq2OYGClu0pWsDifYCoyKWV
 
   frontend-checks:
     name: Frontend Checks
