@@ -38,15 +38,15 @@ jobs:
           --health-retries=5
 
         env:
-          DATABASE_URL: "postgresql+psycopg://cineportal:cineportal_password@localhost:5432/cineportal"
-          SECRET_KEY: "bdc288d753b30c025c79a22b1922d812650937ad10aaf6d329e7e0dbf4974483"
-          STRIPE_SECRET_KEY: "sk_test_51QbY2OGClu0pWsDi8ZxmH8iyGhbiCUda5x3X2cRSTHOHqvh9dBdL3s559UlfeRH6pp8yzEX8kn7iwwTVKs8jBkhm00NBZQroWv
-          STRIPE_WEBHOOK_SECRET: "whsec_292cfeadd2e7aae90f5b401729f905eccf8be74171c68036dc5639c02bed1ac8 "
-          STRIPE_PRICE_BASE: "price_1Tq1TsGClu0pWsDirVqsti0C"
-          STRIPE_PRICE_DISNEY: "price_1Tq282GClu0pWsDi6jdAOcF3"
-          STRIPE_PRICE_MAX: "price_1Tq2IHGClu0pWsDihiIlJKrD"
-          STRIPE_PRICE_PEACOCK: "price_1Tq2MxGClu0pWsDi6wm44h0t"
-          STRIPE_PRICE_PRIME: "price_1Tq2OYGClu0pWsDifYCoyKWV"
+          DATABASE_URL: postgresql+psycopg://cineportal:cineportal_password@localhost:5432/cineportal
+          SECRET_KEY: bdc288d753b30c025c79a22b1922d812650937ad10aaf6d329e7e0dbf4974483
+          STRIPE_SECRET_KEY: sk_test_51QbY2OGClu0pWsDi8ZxmH8iyGhbiCUda5x3X2cRSTHOHqvh9dBdL3s559UlfeRH6pp8yzEX8kn7iwwTVKs8jBkhm00NBZQroWv
+          STRIPE_WEBHOOK_SECRET: whsec_292cfeadd2e7aae90f5b401729f905eccf8be74171c68036dc5639c02bed1ac8
+          STRIPE_PRICE_BASE: price_1Tq1TsGClu0pWsDirVqsti0C
+          STRIPE_PRICE_DISNEY: price_1Tq282GClu0pWsDi6jdAOcF3
+          STRIPE_PRICE_MAX: price_1Tq2IHGClu0pWsDihiIlJKrD
+          STRIPE_PRICE_PEACOCK: price_1Tq2MxGClu0pWsDi6wm44h0t
+          STRIPE_PRICE_PRIME: price_1Tq2OYGClu0pWsDifYCoyKWV
 
     steps:
       - name: Check out repository
