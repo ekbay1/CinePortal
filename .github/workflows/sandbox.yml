@@ -149,7 +149,7 @@ jobs:
               --show-error \
               --silent \
               --request POST \
-              "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+              https://api.render.com/deploy/srv-d9bva3b7uimc73cki9eg?key=_Mi4v_dQYDA
 
         - name: Set up Node.js
           uses: actions/setup-node@v4
