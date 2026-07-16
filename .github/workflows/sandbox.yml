@@ -22,8 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      DATABASE_URL: postgresql+psycopg://cineportal:cineportal_password@localhost:5432/cineportal
-      SECRET_KEY: bdc288d753b30c025c79a22b1922d812650937ad10aaf6d329e7e0dbf4974483
+      DATABASE_URL: postgresql+psycopg://neondb_owner:npg_0Xj8zRklgvIB@ep-morning-wildflower-af1gbrrw-pooler.c-2.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+      SECRET_KEY: ef46b1ba0ae03d683773e78bf201641fddda0b660f297d1dd10415a62b610a46
       STRIPE_SECRET_KEY: sk_test_51QbY2OGClu0pWsDi8ZxmH8iyGhbiCUda5x3X2cRSTHOHqvh9dBdL3s559UlfeRH6pp8yzEX8kn7iwwTVKs8jBkhm00NBZQroWv
       STRIPE_WEBHOOK_SECRET: whsec_292cfeadd2e7aae90f5b401729f905eccf8be74171c68036dc5639c02bed1ac8
       STRIPE_PRICE_BASE: price_1Tq1TsGClu0pWsDirVqsti0C
