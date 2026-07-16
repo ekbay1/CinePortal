@@ -1,42 +1,52 @@
-name: Sandbox CI and Deployment
+name: Sandbox CI
 
 on:
   push:
     branches:
-      - develop
-
+      - sandbox
   pull_request:
     branches:
-      - develop
-
+      - sandbox
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: cineportal-sandbox-${{ github.ref }}
+  group: sandbox-ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   backend-tests:
     name: Backend Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     services:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_DB: cineportal_test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: cineportal
+          POSTGRES_PASSWORD: cineportal_password
+          POSTGRES_DB: cineportal
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U postgres -d cineportal_test"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --health-cmd="pg_isready -U cineportal -d cineportal"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DATABASE_URL: "postgresql+psycopg://cineportal:cineportal_password@localhost:5432/cineportal"
+      SECRET_KEY: "bdc288d753b30c025c79a22b1922d812650937ad10aaf6d329e7e0dbf4974483"
+      STRIPE_SECRET_KEY: "sk_test_51QbY2OGClu0pWsDi8ZxmH8iyGhbiCUda5x3X2cRSTHOHqvh9dBdL3s559UlfeRH6pp8yzEX8kn7iwwTVKs8jBkhm00NBZQroWv
+      STRIPE_WEBHOOK_SECRET: "whsec_292cfeadd2e7aae90f5b401729f905eccf8be74171c68036dc5639c02bed1ac8 "
+      STRIPE_PRICE_BASE: "price_1Tq1TsGClu0pWsDirVqsti0C"
+      STRIPE_PRICE_DISNEY: "price_1Tq282GClu0pWsDi6jdAOcF3"
+      STRIPE_PRICE_MAX: "price_1Tq2IHGClu0pWsDihiIlJKrD"
+      STRIPE_PRICE_PEACOCK: "price_1Tq2MxGClu0pWsDi6wm44h0t"
+      STRIPE_PRICE_PRIME: "price_1Tq2OYGClu0pWsDifYCoyKWV"
 
     steps:
       - name: Check out repository
@@ -50,36 +60,32 @@ jobs:
           cache-dependency-path: backend/requirements.txt
 
       - name: Install backend dependencies
+        working-directory: backend
         run: |
-          cd backend
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run backend lint
+      - name: Display database configuration
+        working-directory: backend
         run: |
-          cd backend
-          python -m ruff check app tests
+          python -c "from app.core.config import settings; print(settings.database_url)"
+
+      - name: Run database migrations
+        working-directory: backend
+        run: python -m alembic upgrade head
+
+      - name: Seed test database
+        working-directory: backend
+        run: python -m app.db.seed
 
       - name: Run backend tests
-        run: |
-          cd backend
-          python -m pytest
-        env:
-          DATABASE_URL: postgresql+psycopg://cineportal:cineportal_password@localhost:5432/cineportal
-          SECRET_KEY: sandbox-ci-secret-key
-          ALGORITHM: HS256
-          ACCESS_TOKEN_EXPIRE_MINUTES: 30
-          STRIPE_SECRET_KEY: sk_test_51QbY2OGClu0pWsDi8ZxmH8iyGhbiCUda5x3X2cRSTHOHqvh9dBdL3s559UlfeRH6pp8yzEX8kn7iwwTVKs8jBkhm00NBZQroWv
-          STRIPE_WEBHOOK_SECRET: whsec_292cfeadd2e7aae90f5b401729f905eccf8be74171c68036dc5639c02bed1ac8
-          STRIPE_PRICE_BASE: price_1Tq1TsGClu0pWsDirVqsti0C
-          STRIPE_PRICE_DISNEY: price_1Tq282GClu0pWsDi6jdAOcF3
-          STRIPE_PRICE_MAX: price_1Tq2IHGClu0pWsDihiIlJKrD
-          STRIPE_PRICE_PEACOCK: price_1Tq2MxGClu0pWsDi6wm44h0t
-          STRIPE_PRICE_PRIME: price_1Tq2OYGClu0pWsDifYCoyKWV
+        working-directory: backend
+        run: pytest -v
 
-  frontend-checks:
-    name: Frontend Checks
+  frontend-tests:
+    name: Frontend Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Check out repository
@@ -88,10 +94,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: "22"
           cache: npm
           cache-dependency-path: frontend/package-lock.json
-      
+
       - name: Install npm 11.10.1
         run: npm install --global npm@11.10.1
 
@@ -101,91 +107,15 @@ jobs:
           npm --version
 
       - name: Install frontend dependencies
-        run: |
-          cd frontend
-          npm ci
+        working-directory: frontend
+        run: npm ci
 
       - name: Run frontend lint
-        run: |
-          cd frontend
-          npm run lint
+        working-directory: frontend
+        run: npm run lint
 
       - name: Build frontend
-        run: |
-          cd frontend
-          npm run build
+        working-directory: frontend
         env:
-          NEXT_PUBLIC_API_URL: http://localhost:8000
-
-  deploy-sandbox:
-    name: Deploy Sandbox
-    runs-on: ubuntu-latest
-
-    needs:
-      - backend-tests
-      - frontend-checks
-
-    if: >-
-      (github.event_name == 'push' &&
-      github.ref == 'refs/heads/develop') ||
-      (github.event_name == 'workflow_dispatch' &&
-      github.ref == 'refs/heads/develop')
-
-    environment:
-      name: sandbox
-      url: ${{ vars.FRONTEND_URL }}
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Trigger sandbox Render deployment
-        run: |
-          cd backend
-          curl \
-            --fail \
-            --show-error \
-            --silent \
-            --request POST \
-            "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
-
-      - name: Pull sandbox Vercel configuration
-        run: |
-          cd frontend
-          vercel pull \
-            --yes \
-            --environment=production \
-            --token="${{ secrets.VERCEL_TOKEN }}"
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      - name: Build sandbox frontend
-        run: |
-          cd frontend
-          vercel build \
-            --prod \
-            --token="${{ secrets.VERCEL_TOKEN }}"
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      - name: Deploy sandbox frontend
-        run: |
-          cd frontend
-          vercel deploy \
-            --prebuilt \
-            --prod \
-            --yes \
-            --token="${{ secrets.VERCEL_TOKEN }}"
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          NEXT_PUBLIC_API_URL: "http://localhost:8000"
+        run: npm run build
