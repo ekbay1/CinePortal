@@ -65,15 +65,20 @@ jobs:
           cd backend
           python -m pytest
         env:
-          DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/cineportal_test
-          SECRET_KEY: production-ci-secret-key
+          DATABASE_URL: postgresql://neondb_owner:npg_0Xj8zRklgvIB@ep-morning-mud-afafce3b-pooler.c-2.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+          SECRET_KEY: bdc288d753b30c025c79a22b1922d812650937ad10aaf6d329e7e0dbf4974483
           ALGORITHM: HS256
           ACCESS_TOKEN_EXPIRE_MINUTES: 30
-          STRIPE_SECRET_KEY: sk_test_placeholder
-          STRIPE_WEBHOOK_SECRET: whsec_placeholder
+          STRIPE_SECRET_KEY: sk_test_51QbY2OGClu0pWsDi8ZxmH8iyGhbiCUda5x3X2cRSTHOHqvh9dBdL3s559UlfeRH6pp8yzEX8kn7iwwTVKs8jBkhm00NBZQroWv
+          STRIPE_WEBHOOK_SECRET: whsec_b5NP1G0Pj6mv9ABjfVzxF2eIcEku8DiM
+          STRIPE_PRICE_BASE: price_1Tq1TsGClu0pWsDirVqsti0C
+          STRIPE_PRICE_DISNEY: price_1Tq282GClu0pWsDi6jdAOcF3
+          STRIPE_PRICE_MAX: price_1Tq2IHGClu0pWsDihiIlJKrD
+          STRIPE_PRICE_PEACOCK: price_1Tq2MxGClu0pWsDi6wm44h0t
+          STRIPE_PRICE_PRIME: price_1Tq2OYGClu0pWsDifYCoyKWV
 
   frontend-tests:
-    name: Frontend Checks
+    name: Frontend Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -110,7 +115,7 @@ jobs:
 
     needs:
       - backend-tests
-      - frontend-checks
+      - frontend-tests
 
     if: >-
       (github.event_name == 'push' &&
