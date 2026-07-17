@@ -16,9 +16,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  if: ${{ github.event.pull_request.merged == true }}
   backend-tests:
     name: Backend Tests
+    if: ${{ github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
 
     services:
@@ -76,8 +76,8 @@ jobs:
           STRIPE_PRICE_PRIME: price_1Tq2OYGClu0pWsDifYCoyKWV
 
   frontend-tests:
-    if: ${{ github.event.pull_request.merged == true }}
     name: Frontend Tests
+    if: ${{ github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
 
     steps:
@@ -117,7 +117,6 @@ jobs:
           NEXT_PUBLIC_API_URL: http://localhost:8000
 
   deploy-production:
-    if: ${{ github.event.pull_request.merged == true }}
     name: Deploy Production
     runs-on: ubuntu-latest
 
