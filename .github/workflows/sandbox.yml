@@ -1,4 +1,4 @@
-name: Sandbox CI
+name: Sandbox CI and Deployment
 
 on:
   push:
