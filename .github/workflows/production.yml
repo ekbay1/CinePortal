@@ -6,7 +6,6 @@ on:
       - main
     types:
       - closed
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -37,8 +36,10 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: Check out repository
+      - name: Check out merged production code
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -81,8 +82,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repository
+      - name: Check out merged production code
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -124,19 +127,15 @@ jobs:
       - backend-tests
       - frontend-tests
 
-    if: >-
-      (github.event_name == 'push' &&
-      github.ref == 'refs/heads/main') ||
-      (github.event_name == 'workflow_dispatch' &&
-      github.ref == 'refs/heads/main')
-
     environment:
       name: production
       url: ${{ vars.FRONTEND_URL }}
 
     steps:
-      - name: Check out repository
+      - name: Check out merged production code
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Trigger production Render deployment
         run: |
@@ -161,7 +160,7 @@ jobs:
           cd frontend
           vercel pull \
             --yes \
-            --environment=production \
+            --environment=production
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_PROD }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -171,7 +170,7 @@ jobs:
         run: |
           cd frontend
           vercel build \
-            --prod \
+            --prod
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_PROD }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -183,7 +182,7 @@ jobs:
           vercel deploy \
             --prebuilt \
             --prod \
-            --yes \
+            --yes
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_PROD }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
